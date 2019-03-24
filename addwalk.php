@@ -1,7 +1,7 @@
 <?php
 $dog = $_POST['dog'];
-$sdate = $_POST['sdate'];
 $stime = $_POST['stime'];
-$edate = $_POST['edate'];
+$slocn = $_POST['slocn'];
 $etime = $_POST['etime'];
+$elocn = $_POST['elocn'];
 ?>
