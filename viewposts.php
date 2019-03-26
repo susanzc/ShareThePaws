@@ -46,6 +46,7 @@ echo "<table><tr>
 <th class='borderclass'>Start location</th>
 <th class='borderclass'>End time</th>
 <th class='borderclass'>End location</th>
+<th class='borderclass'></th>
 </tr>";
 // output data of each row
 while($row = $result->fetch_assoc()) {
@@ -56,7 +57,9 @@ while($row = $result->fetch_assoc()) {
  <td class='borderclass'>".$row["starttime"]."</td>
  <td class='borderclass'>".$row["startlocn"]."</td>
  <td class='borderclass'>".$row["endtime"]."</td>
- <td class='borderclass'>".$row["endlocn"]."</td></tr>";
+ <td class='borderclass'>".$row["endlocn"]."</td>
+ <td class='borderclass'><button type='button'>Request to Walk</button></td>
+ </tr>";
 }
 echo "</table>";
 } else {
