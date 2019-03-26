@@ -1,3 +1,28 @@
+<html>
+<style>
+    table {
+        width: 80%;
+        border: 1px solid black;
+    }
+
+    th {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11pt;
+        background: #666;
+        color: #FFF;
+        padding: 2px 6px;
+        border-collapse: separate;
+        border: 1px solid #000;
+    }
+
+    td {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11pt;
+        border: 1px solid #DDD;
+        color: black;
+    }
+</style>
+</html>
 <?php
 include 'connect.php';
 $conn = OpenCon();
