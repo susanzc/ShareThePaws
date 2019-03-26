@@ -1,3 +1,11 @@
+<div class="menu">
+<a href="index.html">Home</a> ---  
+<a href="register.html">Register</a> ---
+<a href="dogmeetups.php">View Meetups</a> ---
+<a href="viewrequests.php">View Walk Requests</a> ---
+<a href="viewposts.php">View Walk Posts</a>
+</div>
+<h1>Dog Meetups</h1>
 <html>
 <style>
     table {

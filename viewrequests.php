@@ -1,3 +1,11 @@
+<div class="menu">
+<a href="index.html">Home</a> ---  
+<a href="register.html">Register</a> ---
+<a href="dogmeetups.php">View Meetups</a> ---
+<a href="viewrequests.php">View Walk Requests</a> ---
+<a href="viewposts.php">View Walk Posts</a>
+</div>
+<h1>Walk Requests</h1>
 <html>
 <style>
     table {
@@ -31,7 +39,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
 echo "<table><tr>
 <th class='border-class'>Sent by</th>
-<th class='border-class'>Walk Post</th>
+<th class='border-class'>Walk Post ID</th>
 <th class='borderclass'>Message</th>
 <th class='borderclass'>Confirmed?</th>
 </tr>";

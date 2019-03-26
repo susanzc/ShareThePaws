@@ -1,3 +1,11 @@
+<div class="menu">
+<a href="index.html">Home</a> ---  
+<a href="register.html">Register</a> ---
+<a href="dogmeetups.php">View Meetups</a> ---
+<a href="viewrequests.php">View Walk Requests</a> ---
+<a href="viewposts.php">View Walk Posts</a>
+</div>
+<h1>Walk Posts</h1>
 <html>
 <style>
     table {
@@ -27,20 +35,23 @@
 <?php
 include 'connect.php';
 $conn = OpenCon();
-$sql = "SELECT owner, dog, starttime, startlocn, endtime, endlocn FROM walkpost WHERE booked = 'F' AND completed = 'F'";
+$sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn FROM walkpost WHERE booked = 'F' AND completed = 'F'";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
 echo "<table><tr>
+<th class='border-class'>Walk Post ID</th>
 <th class='border-class'>Posted By</th>
 <th class='border-class'>Dog name</th>
-<th class='borderclass'>Pickup time</th>
-<th class='borderclass'>Pickup location</th>
-<th class='borderclass'>Dropoff time</th>
-<th class='borderclass'>Dropoff location</th>
+<th class='borderclass'>Start time</th>
+<th class='borderclass'>Start location</th>
+<th class='borderclass'>End time</th>
+<th class='borderclass'>End location</th>
 </tr>";
 // output data of each row
 while($row = $result->fetch_assoc()) {
- echo "<tr><td class='borderclass'>".$row["owner"]."</td>
+ echo "<tr>
+ <td class='borderclass'>".$row["referenceid"]."</td>
+ <td class='borderclass'>".$row["owner"]."</td>
  <td class='borderclass'>".$row["dog"]."</td>
  <td class='borderclass'>".$row["starttime"]."</td>
  <td class='borderclass'>".$row["startlocn"]."</td>
