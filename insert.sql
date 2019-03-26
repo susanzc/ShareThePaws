@@ -122,11 +122,11 @@ INSERT INTO Dog(Name, Age, Breed, Gender, dogImage, Owner)
 	('Rover', 4, 'golden retriever', 'M', 'rover.jpg', 'edger');
 
 INSERT INTO WalkPost(Owner, Dog, referenceID, starttime, startlocn, endtime, endlocn, booked, completed, specialRequests)
-	VALUES ('alice', 'Rover', 0, '2020-01-01 00:08:00', '49:-123.2', '2020-01-01 00:08:00', '49:-123', 'F', 'F', 'throw ball'),
-	('alice', 'Rover', 1, '2020-01-01 00:08:00', '49:-123.1', '2020-01-01 00:08:00', '49:-123', 'F', 'F', 'throw ball'),
-	('bob', 'Spot', 2, '2020-01-01 00:08:00', '49.1:-123', '2020-01-01 00:08:00', '49:-123', 'F', 'F', 'throw frisbee'),
-	('dillan', 'Fido', 3, '2020-01-01 00:08:00', '49.2:-123', '2020-01-01 00:08:00', '49:-122.5', 'F', 'F', 'run'),
-	('carrie', 'Rex', 4, '2020-01-01 00:08:00', '49:-123', '2020-01-01 00:08:00', '49:-123.1', 'F', 'F', 'rub belly');
+	VALUES ('alice', 'Rover', 0, '2020-01-01 09:00:00', 'UBC Vancouver', '2020-01-01 11:00:00', 'UBC Vancouver', 'F', 'F', 'throw ball'),
+	('alice', 'Rover', 1, '2020-01-01 12:00:00', 'Vancouver General Hospital', '2020-01-01 14:00:00', 'Central Park', 'F', 'F', 'throw ball'),
+	('bob', 'Spot', 2, '2020-01-01 12:00:00', 'Jericho Beach', '2020-01-01 17:00:00', 'UBC Vancouver', 'F', 'F', 'throw frisbee'),
+	('dillan', 'Fido', 3, '2020-01-02 14:00:00', 'Kitsilano Beach', '2020-01-01 16:00:00', 'Kitsilano Beach', 'F', 'F', 'run'),
+	('carrie', 'Rex', 4, '2020-01-03 10:00:00', 'Spanish Banks', '2020-01-01 17:00:00', 'Spanish Banks', 'F', 'F', 'rub belly');
 
 INSERT INTO WalkRequest(walkerID, walkID, requestID, message, confirmed)
 	VALUES ('feres', 0, 3, 'let me walk dogs pls thxs', 'F'),
@@ -143,8 +143,8 @@ INSERT INTO Review(writtenBy, writtenFor, reviewID, rating, date, comment)
 	('carrie', 'joe', 4, 5, '2020-01-01 00:08:00', 'Brought treats for dog. Wow');
 
 INSERT INTO DogMeetupPost(EventID, dateTime, location, postedBy)
-	VALUES (0, '2020-01-01 00:08:00', '49.2:-123.2', 'edger'),
-	(1, '2020-01-01 00:08:00', '49:-123.1', 'edger'),
-	(2, '2020-01-01 00:08:00', '49:-123.2', 'edger'),
-	(3, '2020-01-01 00:08:00', '49.1:-123.1', 'edger'),
-	(4, '2020-01-01 00:08:00', '49.1:-123.1', 'edger');
+	VALUES (0, '2020-01-01 08:00:00', 'Jericho Beach', 'edger'),
+	(1, '2020-01-02 16:00:00', 'Deer Lake Park', 'alice'),
+	(2, '2020-02-01 15:30:00', 'Kitsilano Beach', 'bob'),
+	(3, '2020-03-01 12:00:00', 'UBC Vancouver', 'edger'),
+	(4, '2020-04-01 13:00:00', 'SFU', 'edger');

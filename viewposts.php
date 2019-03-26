@@ -35,7 +35,7 @@
 <?php
 include 'connect.php';
 $conn = OpenCon();
-$sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn FROM walkpost WHERE booked = 'F' AND completed = 'F'";
+$sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn FROM walkpost WHERE booked = 0 AND completed = 0";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
 echo "<table><tr>

@@ -37,7 +37,7 @@ $conn = OpenCon();
 $sql = "SELECT walkerid, walkid, message FROM walkrequest WHERE confirmed = 1";
 $result = $conn->query($sql);
 echo "
-<b>Confirmed Requests:</b>";
+<b>Confirmed Requests:</b><br>";
 if ($result->num_rows > 0) {
 echo "
 <table><tr>
@@ -60,7 +60,7 @@ echo "No confirmed requests to show.";
 $sql = "SELECT walkerid, walkid, message FROM walkrequest WHERE confirmed = 0";
 $result = $conn->query($sql);
 echo "
-<b>Pending Requests:</b>";
+<br><br><b>Pending Requests:</b><br>";
 if ($result->num_rows > 0) {
 echo "
 <table><tr>
@@ -76,7 +76,7 @@ while($row = $result->fetch_assoc()) {
  <td class='borderclass'>".$row["walkid"]."</td>
  <td class='borderclass'>".$row["message"]."</td>
  <td class='borderclass'><button type='button'>Approve</button></td>
- <td class='borderclass'><button type='button'>Ignore</button></td>
+ <td class='borderclass'><button type='button'>Delete</button></td>
  </tr>";
 }
 echo "</table>";
