@@ -66,8 +66,8 @@ requestID integer,
 message varchar(255),
 confirmed boolean,
 PRIMARY KEY (requestID, walkerID, walkID),
-FOREIGN KEY (walkerID) REFERENCES DogWalker(username), 
-FOREIGN KEY (walkID) REFERENCES WalkPost(referenceID) );
+FOREIGN KEY (walkerID) REFERENCES DogWalker(username) ON DELETE CASCADE, 
+FOREIGN KEY (walkID) REFERENCES WalkPost(referenceID) ON DELETE CASCADE );
 
 CREATE TABLE Review
 ( writtenBy varchar(20),

@@ -31,56 +31,157 @@
 </style>
 </html>
 <?php
+session_start();
 include 'connect.php';
 $conn = OpenCon();
-$sql = "SELECT walkerid, walkid, message FROM walkrequest WHERE confirmed = 1";
-$result = $conn->query($sql);
-echo "
-<h2>Confirmed Requests:</h2>";
-if ($result->num_rows > 0) {
-echo "
-<table><tr>
-<th class='border-class'>Sent by</th>
-<th class='border-class'>Walk Post ID</th>
-<th class='borderclass'>Message</th>
-<th class='borderclass'></th>
-</tr>";
-// output data of each row
-while($row = $result->fetch_assoc()) {
- echo "<tr><td class='borderclass'>".$row["walkerid"]."</td>
- <td class='borderclass'>".$row["walkid"]."</td>
- <td class='borderclass'>".$row["message"]."</td>
- <td class='borderclass'><button type='button'>Cancel</button></td></tr>";
+
+function generateOwnerTable($result) {
+    // approve/ignore option
+    // todo: link walk post id to post page
+    if ($result->num_rows > 0) {
+    echo "
+    <table><tr>
+    <th class='border-class'>Sent by</th>
+    <th class='border-class'>Walk Post ID</th>
+    <th class='borderclass'>Message</th>
+    <th class='borderclass'></th>
+    <th class='borderclass'></th>
+    </tr>";
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+     echo "<tr><td class='borderclass'>".$row["walkerid"]."</td>
+     <td class='borderclass'>".$row["walkid"]."</td>
+     <td class='borderclass'>".$row["message"]."</td>
+     <td class='borderclass'>
+     <form style='margin: 5px' action='viewrequests.php' method='post'>
+        <input type='hidden' name='reqid' value='".$row["requestid"]."'>
+        <input type='hidden' name='walkid' value='".$row["walkid"]."'>
+        <button type='submit' name='approverequest'>Approve</button>
+     </form>
+     </td>
+     <td class='borderclass'>
+     <form style='margin: 5px' action='viewrequests.php' method='post'>
+        <input type='hidden' name='reqid' value='".$row["requestid"]."'>
+        <button type='submit' name='deleterequest'>Delete</button>
+     </form></td>
+     </tr>";
+    }
+    echo "</table>";
+    } else {
+    echo "No requests to show.";
+    }
 }
-echo "</table>";
-} else {
-echo "No confirmed requests to show.";
+
+function generateWalkerTable($result, $confirmed) {
+    // view confirmed requests (can't delete yet!)
+    // can delete pending requests
+    // todo: link walk post id to post page
+    if ($result->num_rows > 0) {
+    echo "
+    <table><tr>
+    <th class='border-class'>Sent by</th>
+    <th class='border-class'>Walk Post ID</th>
+    <th class='borderclass'>Message</th>
+    <th class='borderclass'></th>
+    </tr>";
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+    echo "<tr><td class='borderclass'>".$row["walkerid"]."</td>
+    <td class='borderclass'>".$row["walkid"]."</td>
+    <td class='borderclass'>".$row["message"]."</td>
+    <td class='borderclass'>
+    <form style='margin: 5px' action='viewrequests.php' method='post'>
+        <input type='hidden' name='reqid' value='".$row["requestid"]."'>
+        <button type='submit' hidden='$confirmed' name='deleterequest'>Delete</button>
+    </form>
+    </td></tr>";
+    }
+    echo "</table>";
+    } else {
+    echo "No requests to show.";
+    }
+
 }
-$sql = "SELECT walkerid, walkid, message FROM walkrequest WHERE confirmed = 0";
-$result = $conn->query($sql);
-echo "
-<h2>Pending Requests:</h2>";
-if ($result->num_rows > 0) {
-echo "
-<table><tr>
-<th class='border-class'>Sent by</th>
-<th class='border-class'>Walk Post ID</th>
-<th class='borderclass'>Message</th>
-<th class='borderclass'></th>
-<th class='borderclass'></th>
-</tr>";
-// output data of each row
-while($row = $result->fetch_assoc()) {
- echo "<tr><td class='borderclass'>".$row["walkerid"]."</td>
- <td class='borderclass'>".$row["walkid"]."</td>
- <td class='borderclass'>".$row["message"]."</td>
- <td class='borderclass'><button type='button'>Approve</button></td>
- <td class='borderclass'><button type='button'>Ignore</button></td>
- </tr>";
+$usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
+$user = isset($_SESSION["user"])? $_SESSION["user"] : "";
+if (array_key_exists('deleterequest', $_POST)) {
+    $reqid = $_POST['reqid'];
+    $sql = "delete from walkrequest where requestid = $reqid";
+    $result = $conn->query($sql);
+    if ($result === TRUE) {
+        echo "<br><div>Walk request deleted successfully!</div><br>";
+        echo "<form action='viewrequests.php'>
+        <button type='submit'>View Walk Requests</button>
+        </form>";
+        echo "<form action='viewposts.php'>
+        <button type='submit'>View Walk Posts</button>
+        </form>";
+    }
+    else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
 }
-echo "</table>";
-} else {
-echo "No pending requests to show.";
+else if (array_key_exists('approverequest', $_POST)) {
+    $reqid = $_POST['reqid']; // to update request
+    $walkid = $_POST['walkid']; // to update walk post
+
+    $sql = "update walkrequest set confirmed = 1 where requestid = $reqid";
+    $result = $conn->query($sql);
+    if ($result === TRUE) {
+        $sql = "update walkpost set booked = 1 where referenceid = $walkid";
+        $result = $conn->query($sql);
+        if ($result === TRUE) {
+            // delete all other pending requests for this walk
+            $sql = "delete from walkrequest where requestid != $reqid AND walkid = $walkid";
+            $result = $conn->query($sql);
+            if ($result === TRUE) {
+                echo "<br><div>Walk request confirmed for walk post with ID = $walkid !</div><br>";
+                echo "<form action='viewrequests.php'>
+                <button type='submit'>View Walk Requests</button>
+                </form>";
+                echo "<form action='viewposts.php'>
+                <button type='submit'>View Walk Posts</button>
+                </form>";
+            }
+            else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+        }
+        else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
+    else {
+        // there could be some inconsistencies here if walkrequest was updated but walkpost wasnt
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+else {
+    if ($usertype == "walker") {
+        $sql = "SELECT walkerid, walkid, requestid, message FROM walkrequest 
+        WHERE confirmed = 1 AND walkerid = '$user'";
+        $result = $conn->query($sql);
+        echo "
+        <h2>Confirmed Requests:</h2>";
+        generateWalkerTable($result, true);
+
+        $sql = "SELECT walkerid, walkid, requestid, message FROM walkrequest 
+        WHERE confirmed = 0 AND walkerid = '$user'";
+        $result = $conn->query($sql);
+        echo "
+        <h2>Pending Requests:</h2>";
+        generateWalkerTable($result, false);
+    }
+    else if ($usertype == "owner") {
+        $sql = "SELECT wr.walkerid as walkerid, 
+        wr.walkid as walkid, wr.requestid as requestid, wr.message as message
+        FROM walkrequest wr, walkpost wp
+        WHERE wr.walkid = wp.referenceid AND wp.owner = '$user' AND wr.confirmed = 0";
+        $result = $conn->query($sql);
+        echo "
+        <h2>Pending Requests:</h2>";
+        generateOwnerTable($result);
+    }
 }
 CloseCon($conn);
 ?>

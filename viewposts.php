@@ -60,67 +60,61 @@ $conn = OpenCon();
 $usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
 $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
 
-function generateTable($result) {
+function generateTable($result, $booked) {
     $usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
     if ($result->num_rows > 0) {
         echo "<table><tr>
         <th class='border-class'>Walk Post ID</th>
-        <th class='border-class'>Description</th>";
-    if ($usertype === "owner") {
-        echo "<th class='borderclass'></th>
+        <th class='border-class'>Description</th>
         <th class='borderclass'></th>
         </tr>";
-    }
-    else if ($usertype === "walker") {
-        echo "<th class='borderclass'></th>
-        </tr>";
-    }
-    else {
-        echo "</tr>";
-    }
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-     echo "<tr>
-     <td class='borderclass'>".$row["referenceid"]."</td>
-     <td class='borderclass'>
-     <div style='padding: 2pt'><b>Posted By: </b>".$row["owner"]."</div>
-     <div style='padding: 2pt'><b>Dog Name: </b>".$row["dog"]."</div>
-     <div style='padding: 2pt'><b>Start Time: </b>".$row["starttime"]."</div>
-     <div style='padding: 2pt'><b>Start Location: </b>".$row["startlocn"]."</div>
-     <div style='padding: 2pt'><b>End Time: </b>".$row["endtime"]."</div>
-     <div style='padding: 2pt'><b>End Location: </b>".$row["endlocn"]."</div>
-     <div style='padding: 2pt'><b>Special Requests: </b>".$row["specialrequests"]."</div>
-     </td>";
-     if ($usertype === "owner") {
-     echo "
-        
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+        echo "<tr>
+        <td class='borderclass'>".$row["referenceid"]."</td>
         <td class='borderclass'>
-        <form action='viewposts.php' method='post'>
-        <input type='hidden' name='refid' value='".$row["referenceid"]."'>
-        <button style='width: 80px' type='submit' name='markcomplete' style='background-color: #4CAF50'>Mark as Complete</button>
-        </form>
-        </td>
-    
-        <td class='borderclass'>
-        <form action='viewposts.php' method='post'>
-        <input type='hidden' name='refid' value='".$row["referenceid"]."'>
-        <button type='submit' name='deletepost' style='width: 80px; background-color: #F00'>Delete Post</button>
-        </form></td>
-        </tr>";
-     }
-     else if ($usertype === "walker") {
-        echo "<td class='borderclass'>
-        <form action='viewposts.php' method='post'>
-        <input type='hidden' name='walkid' value='".$row["referenceid"]."'>
-        <button style='width: 80px' type='submit' name='requestwalk'>Request to Walk</button>
-        </form></td>
-        </tr>";
-     }
-     else {
-         echo "</tr>";
-     }
-    }
-    echo "</table>";
+        <div style='padding: 2pt'><b>Posted By: </b>".$row["owner"]."</div>
+        <div style='padding: 2pt'><b>Dog Name: </b>".$row["dog"]."</div>
+        <div style='padding: 2pt'><b>Start Time: </b>".$row["starttime"]."</div>
+        <div style='padding: 2pt'><b>Start Location: </b>".$row["startlocn"]."</div>
+        <div style='padding: 2pt'><b>End Time: </b>".$row["endtime"]."</div>
+        <div style='padding: 2pt'><b>End Location: </b>".$row["endlocn"]."</div>
+        <div style='padding: 2pt'><b>Special Requests: </b>".$row["specialrequests"]."</div>
+        </td>";
+        if ($usertype === "owner") {
+            if ($booked) {
+            echo "
+            
+            <td class='borderclass'>
+            <form action='viewposts.php' method='post'>
+            <input type='hidden' name='refid' value='".$row["referenceid"]."'>
+            <button style='width: 80px' type='submit' name='markcomplete' style='background-color: #4CAF50'>Mark as Complete</button>
+            </form>
+            </td>";
+            }
+            else {
+                echo "
+            <td class='borderclass'>
+            <form action='viewposts.php' method='post'>
+            <input type='hidden' name='refid' value='".$row["referenceid"]."'>
+            <button type='submit' name='deletepost' style='width: 80px; background-color: #F00'>Delete Post</button>
+            </form></td>";
+            }
+            echo "</tr>";
+        }
+        else if ($usertype === "walker" && !$booked) {
+            echo "<td class='borderclass'>
+            <form action='viewposts.php' method='post'>
+            <input type='hidden' name='walkid' value='".$row["referenceid"]."'>
+            <button style='width: 80px' type='submit' name='requestwalk'>Request to Walk</button>
+            </form></td>
+            </tr>";
+        }
+        else {
+            echo "</tr>";
+        }
+        }
+        echo "</table>";
     } else {
     echo "No results to show.<br><br>";
     }
@@ -146,11 +140,10 @@ else if (array_key_exists('submitrequest', $_POST)) {
     $message = $_POST['message'];
 
     // generate new requestid
-    $sql = "select max(walkid) as max from walkrequest";
+    $sql = "select max(requestid) as max from walkrequest";
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
     $reqid = $row['max'] + 1;
-
     $sql = "insert into walkrequest values ('$user', '$walkid', $reqid, '$message', 'F')";
     $result = $conn->query($sql);
     if ($result === TRUE) {
@@ -166,8 +159,34 @@ else if (array_key_exists('submitrequest', $_POST)) {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
-    // send sql query insert
-    // success/error feedback, return button
+}
+else if (array_key_exists('deletepost', $_POST)) {
+    $refID = (int)$_POST['refid'];
+    $sql = "delete from walkpost where referenceid = $refID";
+    $result = $conn->query($sql);
+    if ($result === TRUE) {
+        echo "<br><div>Walk post with ID = $refID deleted successfully!</div><br>";
+        echo "<form action='viewposts.php'>
+        <button type='submit'>View Walk Posts</button>
+    </form>";
+    }
+    else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+else if (array_key_exists('markcomplete', $_POST)) {
+    $refID = (int)$_POST['refid'];
+    $sql = "update walkpost set completed = 1 where referenceid = $refID";
+    $result = $conn->query($sql);
+    if ($result === TRUE) {
+        echo "<br><div>Walk post with ID = $refID marked as complete!</div><br>";
+        echo "<form action='viewposts.php'>
+        <button type='submit'>View Walk Posts</button>
+    </form>";
+    }
+    else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
 }
 else {
     // main display with tables
@@ -178,51 +197,36 @@ else {
         $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
         FROM walkpost WHERE booked = 1 AND completed = 0 AND owner = '$user'";
         $resultbooked = $conn->query($sql);
-        generateTable($resultbooked);
+        generateTable($resultbooked, true);
 
         echo "<h2>Unbooked Walks:</h2>";
         $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
         FROM walkpost WHERE booked = 0 AND completed = 0 AND owner = '$user'";
         $resultunbooked = $conn->query($sql);
-        generateTable($resultunbooked);
+        generateTable($resultunbooked, false);
 
         
     }
-    else {
-        // show all results
+    else if ($usertype === "walker") {
+        echo "<h2>Scheduled Walks:</h2>";
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
+        FROM walkpost WHERE booked = 1 AND completed = 0 AND 
+        referenceid in (SELECT walkid FROM walkrequest WHERE walkerid = '$user' AND confirmed = 1)";
+        $result = $conn->query($sql);
+        generateTable($result, true);
+
+        echo "<h2>Available Walks:</h2>";
         $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
         FROM walkpost WHERE booked = 0 AND completed = 0";
         $result = $conn->query($sql);
-        generateTable($result);
+        generateTable($result, false);
     }
-
-    if (array_key_exists('deletepost', $_POST)) {
-        $refID = (int)$_POST['refid'];
-        $sql = "delete from walkpost where referenceid = $refID";
+    else {
+        // show all results for anon user
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
+        FROM walkpost WHERE booked = 0 AND completed = 0";
         $result = $conn->query($sql);
-        if ($result === TRUE) {
-            echo "<br><div>Walk post with ID = $refID deleted successfully!</div><br>";
-            echo "<form action='viewposts.php'>
-            <button type='submit'>Refresh Page</button>
-        </form>";
-        }
-        else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
-    }
-    else if (array_key_exists('markcomplete', $_POST)) {
-        $refID = (int)$_POST['refid'];
-        $sql = "update walkpost set completed = 1 where referenceid = $refID";
-        $result = $conn->query($sql);
-        if ($result === TRUE) {
-            echo "<br><div>Walk post with ID = $refID marked as complete!</div><br>";
-            echo "<form action='viewposts.php'>
-            <button type='submit'>Refresh Page</button>
-        </form>";
-        }
-        else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
+        generateTable($result, false);
     }
 }
 CloseCon($conn);

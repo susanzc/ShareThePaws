@@ -12,7 +12,7 @@
     session_start();
     include 'connect.php';
     $conn = OpenCon();
-    $user = $_SESSION["user"];
+    $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
     $sql = "SELECT name FROM dog where owner = '$user'";
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()){
