@@ -1,9 +1,8 @@
 <div class="menu">
 <a href="index.html">Home</a> ---  
-<a href="register.html">Register</a> ---
-<a href="dogmeetups.php">View Meetups</a> ---
-<a href="viewrequests.php">View Walk Requests</a> ---
-<a href="viewposts.php">View Walk Posts</a>
+<a href="dogmeetups.php">Dog Meetups</a> ---
+<a href="viewrequests.php">Walk Requests</a> ---
+<a href="viewposts.php">Walk Posts</a>
 </div>
 <h1>Walk Requests</h1>
 <html>
@@ -37,7 +36,7 @@ $conn = OpenCon();
 $sql = "SELECT walkerid, walkid, message FROM walkrequest WHERE confirmed = 1";
 $result = $conn->query($sql);
 echo "
-<b>Confirmed Requests:</b><br>";
+<h2>Confirmed Requests:</h2>";
 if ($result->num_rows > 0) {
 echo "
 <table><tr>
@@ -60,7 +59,7 @@ echo "No confirmed requests to show.";
 $sql = "SELECT walkerid, walkid, message FROM walkrequest WHERE confirmed = 0";
 $result = $conn->query($sql);
 echo "
-<br><br><b>Pending Requests:</b><br>";
+<h2>Pending Requests:</h2>";
 if ($result->num_rows > 0) {
 echo "
 <table><tr>

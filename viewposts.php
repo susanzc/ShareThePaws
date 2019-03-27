@@ -1,10 +1,9 @@
 
 <div class="menu">
 <a href="index.html">Home</a> ---  
-<a href="register.html">Register</a> ---
-<a href="dogmeetups.php">View Meetups</a> ---
-<a href="viewrequests.php">View Walk Requests</a> ---
-<a href="viewposts.php">View Walk Posts</a>
+<a href="dogmeetups.php">Dog Meetups</a> ---
+<a href="viewrequests.php">Walk Requests</a> ---
+<a href="viewposts.php">Walk Posts</a>
 </div>
 <h1>Walk Posts</h1>
 <?php
@@ -16,7 +15,6 @@ if ($usertype === "owner") {
     </form>";
 }
 ?>
-<br>
 <html>
 <style>
     table {
@@ -25,16 +23,15 @@ if ($usertype === "owner") {
 
     button {
         background-color: #4CAF50;
-        border:0.16em solid #666;
+        /* border:0.16em solid #666; */
         border-radius:2em;
         color: white;
-        padding: 10px 10px;
-        text-align: center;
+        padding: 5px 10px;
+        /* text-align: center;
         text-decoration: none;
-        display: inline-block;
+        display: inline-block; */
         font-size: 12px;
-        margin: 4px 2px;
-        cursor: pointer;
+        cursor: pointer; 
     }
 
     th {
@@ -100,19 +97,23 @@ function generateTable($result) {
         <td class='borderclass'>
         <form action='viewposts.php' method='post'>
         <input type='hidden' name='refid' value='".$row["referenceid"]."'>
-        <button type='submit' name='markcomplete' style='background-color: #4CAF50'>Mark as Complete</button>
+        <button style='width: 80px' type='submit' name='markcomplete' style='background-color: #4CAF50'>Mark as Complete</button>
         </form>
         </td>
     
         <td class='borderclass'>
         <form action='viewposts.php' method='post'>
         <input type='hidden' name='refid' value='".$row["referenceid"]."'>
-        <button type='submit' name='deletepost' style='background-color: #F00'>Remove Post</button>
+        <button type='submit' name='deletepost' style='width: 80px; background-color: #F00'>Delete Post</button>
         </form></td>
         </tr>";
      }
      else if ($usertype === "walker") {
-        echo "<td class='borderclass'><button type='button'>Request to Walk</button></td>
+        echo "<td class='borderclass'>
+        <form action='viewposts.php' method='post'>
+        <input type='hidden' name='walkid' value='".$row["referenceid"]."'>
+        <button style='width: 80px' type='submit' name='requestwalk'>Request to Walk</button>
+        </form></td>
         </tr>";
      }
      else {
@@ -125,57 +126,103 @@ function generateTable($result) {
     }
 }
 
-if ($usertype === "owner") {
-    // show only results associated with user
-    echo "<h2>Booked Walks:</h2>";
-    // todo - join with walkrequest and show walker that booked the walk
-    $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
-    FROM walkpost WHERE booked = 1 AND completed = 0 AND owner = '$user'";
-    $resultbooked = $conn->query($sql);
-    generateTable($resultbooked);
+if (array_key_exists('requestwalk', $_POST)) {
+    // walk request message display
+    $walkid = $_POST['walkid'];
 
-    echo "<h2>Unbooked Walks:</h2>";
-    $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
-    FROM walkpost WHERE booked = 0 AND completed = 0 AND owner = '$user'";
-    $resultunbooked = $conn->query($sql);
-    generateTable($resultunbooked);
+    echo "<h2>Sending Walk Request for Walk ID = $walkid :</h2>";
+    echo "<div> Message to the owner: </div>";
+    echo "<form action='viewposts.php' method='post'>
+    <input type='hidden' name='walkid' value='".$walkid."'>
+    <textarea class='text' placeholder='Eg. Hi! I am very interested in walking your dog :)' cols='70' rows ='5' name='message'></textarea>
+    <br>
+    <input type='submit' name='submitrequest' value='Submit Request'>
+   </form>";
 
-    
+}
+else if (array_key_exists('submitrequest', $_POST)) {
+    // request sent display
+    $walkid = $_POST['walkid'];
+    $message = $_POST['message'];
+
+    // generate new requestid
+    $sql = "select max(walkid) as max from walkrequest";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $reqid = $row['max'] + 1;
+
+    $sql = "insert into walkrequest values ('$user', '$walkid', $reqid, '$message', 'F')";
+    $result = $conn->query($sql);
+    if ($result === TRUE) {
+        echo "<div>Walk request successfully sent!</div><br>";
+        echo "<form action='viewposts.php'>
+        <button type='submit'>View Walk Posts</button>
+        </form>";
+        echo "<form action='viewrequests.php'>
+        <button type='submit'>View Walk Requests</button>
+        </form>";
+    }
+    else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    // send sql query insert
+    // success/error feedback, return button
 }
 else {
-    // show all results
-    $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
-    FROM walkpost WHERE booked = 0 AND completed = 0";
-    $result = $conn->query($sql);
-    generateTable($result);
-}
+    // main display with tables
+    if ($usertype === "owner") {
+        // show only results associated with user
+        echo "<h2>Booked Walks:</h2>";
+        // todo - join with walkrequest and show walker that booked the walk
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
+        FROM walkpost WHERE booked = 1 AND completed = 0 AND owner = '$user'";
+        $resultbooked = $conn->query($sql);
+        generateTable($resultbooked);
 
-if (array_key_exists('deletepost', $_POST)) {
-    $refID = (int)$_POST['refid'];
-    $sql = "delete from walkpost where referenceid = $refID";
-    $result = $conn->query($sql);
-    if ($result === TRUE) {
-        echo "<br><div>Walk post with ID = $refID deleted successfully!</div><br>";
-        echo "<form action='viewposts.php'>
-        <button type='submit'>Refresh Page</button>
-       </form>";
+        echo "<h2>Unbooked Walks:</h2>";
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
+        FROM walkpost WHERE booked = 0 AND completed = 0 AND owner = '$user'";
+        $resultunbooked = $conn->query($sql);
+        generateTable($resultunbooked);
+
+        
     }
     else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        // show all results
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
+        FROM walkpost WHERE booked = 0 AND completed = 0";
+        $result = $conn->query($sql);
+        generateTable($result);
     }
-}
-else if (array_key_exists('markcomplete', $_POST)) {
-    $refID = (int)$_POST['refid'];
-    $sql = "update walkpost set completed = 1 where referenceid = $refID";
-    $result = $conn->query($sql);
-    if ($result === TRUE) {
-        echo "<br><div>Walk post with ID = $refID marked as complete!</div><br>";
-        echo "<form action='viewposts.php'>
-        <button type='submit'>Refresh Page</button>
-       </form>";
+
+    if (array_key_exists('deletepost', $_POST)) {
+        $refID = (int)$_POST['refid'];
+        $sql = "delete from walkpost where referenceid = $refID";
+        $result = $conn->query($sql);
+        if ($result === TRUE) {
+            echo "<br><div>Walk post with ID = $refID deleted successfully!</div><br>";
+            echo "<form action='viewposts.php'>
+            <button type='submit'>Refresh Page</button>
+        </form>";
+        }
+        else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
     }
-    else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+    else if (array_key_exists('markcomplete', $_POST)) {
+        $refID = (int)$_POST['refid'];
+        $sql = "update walkpost set completed = 1 where referenceid = $refID";
+        $result = $conn->query($sql);
+        if ($result === TRUE) {
+            echo "<br><div>Walk post with ID = $refID marked as complete!</div><br>";
+            echo "<form action='viewposts.php'>
+            <button type='submit'>Refresh Page</button>
+        </form>";
+        }
+        else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
     }
 }
 CloseCon($conn);

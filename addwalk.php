@@ -1,9 +1,8 @@
 <div class="menu">
 <a href="index.html">Home</a> ---  
-<a href="register.html">Register</a> ---
-<a href="dogmeetups.php">View Meetups</a> ---
-<a href="viewrequests.php">View Walk Requests</a> ---
-<a href="viewposts.php">View Walk Posts</a>
+<a href="dogmeetups.php">Dog Meetups</a> ---
+<a href="viewrequests.php">Walk Requests</a> ---
+<a href="viewposts.php">Walk Posts</a>
 </div>
 <h1>Add a Walk</h1>
 <form action="addwalk.php" method="post">
