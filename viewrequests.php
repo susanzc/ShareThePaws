@@ -3,6 +3,13 @@
 <a href="dogmeetups.php">Dog Meetups</a> ---
 <a href="viewrequests.php">Walk Requests</a> ---
 <a href="viewposts.php">Walk Posts</a>
+<?php
+session_start();
+$user = isset($_SESSION["user"])? $_SESSION["user"] : "";
+if ($user != "") {
+    echo "<div style='float: right'>Hello, <b>$user</b></div>";
+}
+?>
 </div>
 <h1>Walk Requests</h1>
 <html>
@@ -31,7 +38,6 @@
 </style>
 </html>
 <?php
-session_start();
 include 'connect.php';
 $conn = OpenCon();
 

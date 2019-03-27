@@ -3,9 +3,10 @@
 <a href="dogmeetups.php">Dog Meetups</a> ---
 <a href="viewrequests.php">Walk Requests</a> ---
 <a href="viewposts.php">Walk Posts</a>
+<?php
+session_start();?>
 </div>
 <?php
-session_start();
 include 'connect.php';
 $username = $_POST['username'];
 $password = $_POST['password'];

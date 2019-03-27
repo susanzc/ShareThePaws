@@ -4,10 +4,16 @@
 <a href="dogmeetups.php">Dog Meetups</a> ---
 <a href="viewrequests.php">Walk Requests</a> ---
 <a href="viewposts.php">Walk Posts</a>
+<?php
+session_start();
+$user = isset($_SESSION["user"])? $_SESSION["user"] : "";
+if ($user != "") {
+    echo "<div style='float: right'>Hello, <b>$user</b></div>";
+}
+?>
 </div>
 <h1>Walk Posts</h1>
 <?php
-session_start();
 $usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
 if ($usertype === "owner") {
     echo "<form action='addwalk.php'>

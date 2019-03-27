@@ -3,13 +3,19 @@
 <a href="dogmeetups.php">Dog Meetups</a> ---
 <a href="viewrequests.php">Walk Requests</a> ---
 <a href="viewposts.php">Walk Posts</a>
+<?php
+session_start();
+$user = isset($_SESSION["user"])? $_SESSION["user"] : "";
+if ($user != "") {
+    echo "<div style='float: right'>Hello, <b>$user</b></div>";
+}
+?>
 </div>
 <h1>Add a Walk</h1>
 <form action="addwalk.php" method="post">
  <label>Dog Name:</label>
  <select name="dog">
  <?php 
-    session_start();
     include 'connect.php';
     $conn = OpenCon();
     $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
