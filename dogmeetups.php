@@ -12,6 +12,15 @@ if ($user != "") {
 ?>
 </div>
 <h1>Dog Meetups</h1>
+<?php
+$usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
+if ($usertype == "owner") {
+echo "<form action='dogmeetups.php' method='post'>
+    <button type='submit' name='createmeetup'>Create Meetup Event</button>
+</form>";
+}
+?>
+
 <html>
 <style>
     table {
@@ -40,6 +49,42 @@ if ($user != "") {
 <?php
 include 'connect.php';
 $conn = OpenCon();
+$user = isset($_SESSION["user"])? $_SESSION["user"] : "";
+$usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
+if (array_key_exists('submitmeetup', $_POST)) {
+    $time = $_POST['time'];
+    $locn = $_POST['locn'];
+    $datetime = date("Y-m-d H:i:s", strtotime($time));
+    // get event id
+    $sql = "select max(eventid) as max from dogmeetuppost";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $eventid = $row['max'] + 1;
+
+    $sql = "insert into dogmeetuppost values ($eventid, '$datetime', '$locn', '$user')";
+    $result = $conn->query($sql);
+    // TODO
+    if ($result === TRUE) {
+        echo "<div>Event created!</div><br>";
+    }
+    else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+
+}
+if (array_key_exists('createmeetup', $_POST)) {
+    echo "<form action='dogmeetups.php' method='post'>
+    <label>Time</label>
+    <input name='time' type='datetime-local' placeholder='Type Here'>
+    <br>
+    <label>Location</label>
+    <input name='locn' type='text' placeholder='Type Here'>
+    <br>
+    <br>
+    <input type='submit' name='submitmeetup' value='Post Meetup Event'>
+   </form>";
+}
 $sql = "SELECT datetime, location, postedby FROM
 dogmeetuppost";
 $result = $conn->query($sql);

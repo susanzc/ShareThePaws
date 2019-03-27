@@ -81,7 +81,7 @@ foreign key (writtenBy) references DogOwner(username),
 foreign key (writtenFor) references DogWalker(username) );
 
 CREATE TABLE DogMeetupPost
-( eventID char(20),
+( eventID integer,
 dateTime timestamp,
 location varchar(100),
 postedBy varchar(20),
