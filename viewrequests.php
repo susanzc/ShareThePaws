@@ -76,7 +76,7 @@ while($row = $result->fetch_assoc()) {
  <td class='borderclass'>".$row["walkid"]."</td>
  <td class='borderclass'>".$row["message"]."</td>
  <td class='borderclass'><button type='button'>Approve</button></td>
- <td class='borderclass'><button type='button'>Delete</button></td>
+ <td class='borderclass'><button type='button'>Ignore</button></td>
  </tr>";
 }
 echo "</table>";
