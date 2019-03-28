@@ -116,12 +116,12 @@ INSERT INTO DogType(age, breed, size)
 	(17, 'husky', 'L');
 
 INSERT INTO Dog(Name, Age, Breed, Gender, dogImage, Owner)
-	VALUES ('Rover', 4, 'pit bull', 'M', 'rover.jpg', 'alice'),
-	('Dover', 1, 'pit bull', 'M', 'dover.jpg', 'alice'),
-	('Spot', 4, 'husky', 'F', 'spot.jpg', 'bob'),
-	('Rex', 4, 'pomerainian', 'M', 'rex.jpg',  'carrie'),
-	('Fido', 4, 'corgi', 'F', 'fido.jpg', 'dillan'),
-	('Teddy', 4, 'golden retriever', 'M', 'rover.jpg', 'edger');
+	VALUES ('Rover', 4, 'pit bull', 'M', 'pitbull.jpg', 'alice'),
+	('Dover', 1, 'pit bull', 'M', 'pitbull.jpg', 'alice'),
+	('Spot', 4, 'husky', 'F', 'husky.jpg', 'bob'),
+	('Rex', 4, 'pomerainian', 'M', 'pom.jpg',  'carrie'),
+	('Fido', 4, 'corgi', 'F', 'corgi.jpg', 'dillan'),
+	('Teddy', 4, 'golden retriever', 'M', 'golden.jpg', 'edger');
 
 INSERT INTO WalkPost(Owner, Dog, referenceID, starttime, startlocn, endtime, endlocn, booked, completed, specialRequests)
 	VALUES ('alice', 'Rover', 0, '2020-01-01 09:00:00', 'UBC Vancouver', '2020-01-01 11:00:00', 'UBC Vancouver', 0, 0, 'throw ball'),
