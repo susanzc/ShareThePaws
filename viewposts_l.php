@@ -25,17 +25,23 @@ if ($usertype === "owner") {
 
 <h3>Filter by:</h3>
 <?php
+$size = null;
 $usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
 if ($usertype === "walker") {
-    echo "<form action='viewposts_s.php'>
-    <button type='submit' style='padding: 10px 13px; font-size: 14px'>S</button>
-    </form>";
-    echo "<form action='viewposts_m.php'>
-    <button type='submit' style='padding: 10px 13px; font-size: 14px'>M</button>
-    </form>";
-    echo "<form action='viewposts_l.php'>
-    <button type='submit' style='padding: 10px 13px; font-size: 14px'>L</button>
-    </form>";
+
+  echo "<form action='viewposts_s.php'>
+  <button type='submit' style='padding: 10px 13px; font-size: 14px'>S</button>
+  </form>";
+  echo "<form action='viewposts_m.php'>
+  <button type='submit' style='padding: 10px 13px; font-size: 14px'>M</button>
+  </form>";
+  echo "<form action='viewposts_l.php'>
+  <button type='submit' style='padding: 10px 13px; font-size: 14px'>L</button>
+  </form>";
+  echo "<form action='viewposts.php'>
+  <button type='submit' style='padding: 10px 13px; font-size: 14px'>Cancel filter</button>
+  </form>";
+
 }
 ?>
 
@@ -240,10 +246,9 @@ else {
         generateTable($result, true);
 
 
-
         echo "<h2>Available Walks:</h2>";
-        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed
-        FROM walkpost WHERE booked = 0 AND completed = 0";
+        $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
+        FROM walkpost w, Dog d, DogType dt WHERE w.booked = 0 AND w.completed = 0 AND w.dog = d.name AND d.age = dt.age AND d.breed = dt.breed AND dt.size = 'L'";
         $result = $conn->query($sql);
         generateTable($result, false);
     }
