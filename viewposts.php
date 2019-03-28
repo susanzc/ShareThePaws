@@ -17,7 +17,7 @@
         text-decoration: none;
         display: inline-block; */
         font-size: 12px;
-        cursor: pointer; 
+        cursor: pointer;
     }
 
     th {
@@ -37,7 +37,7 @@
 </style>
 </html>
 <div class="menu">
-<a href="index.html">Home</a> ---  
+<a href="index.html">Home</a> ---
 <a href="dogmeetups.php">Dog Meetups</a> ---
 <a href="collections.php">Collections</a> ---
 <a href="viewrequests.php">Walk Requests</a> ---
@@ -48,11 +48,11 @@ $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
 $usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
 if ($user != "") {
     if ($usertype == "walker") {
-        echo "<div style='float: right'>Hello, 
+        echo "<div style='float: right'>Hello,
         <a href='walker.php?walker=".$user."'><b>$user</b></a></div>";
     }
     else if ($usertype == "owner") {
-        echo "<div style='float: right'>Hello, 
+        echo "<div style='float: right'>Hello,
         <a href='owner.php?owner=".$user."'><b>$user</b></a></div>";
     }
     else echo "<div style='float: right'>Hello, <b>$user</b></div>";
@@ -210,7 +210,7 @@ else if (array_key_exists('editpost', $_POST)) {
     $etime = strftime('%Y-%m-%dT%H:%M:%S', strtotime($row['endtime']));
 
     // load current info - can change start/end locn and time and special requests only
-    
+
     echo "<h2>Edit Walk Post ID = $refid</h2>";
     echo "<div><b>Dog Name: </b>".$row['dog']."</div>";
     echo "<form action='viewposts.php' method='post'>
@@ -247,8 +247,8 @@ else if (array_key_exists('submitupdate', $_POST)) {
     $etime = date("Y-m-d H:i:s", strtotime($_POST['etime']));
     $elocn = $_POST['elocn'];
     $requests = $_POST['requests'];
-    $sql = "UPDATE walkpost SET starttime = '$stime', startlocn = '$slocn', 
-    endtime = '$etime', endlocn = '$elocn', 
+    $sql = "UPDATE walkpost SET starttime = '$stime', startlocn = '$slocn',
+    endtime = '$etime', endlocn = '$elocn',
     specialrequests = '$requests' where referenceid = $refid";
     $result = $conn->query($sql);
     if ($result === TRUE) {
@@ -271,7 +271,7 @@ else if (array_key_exists('markcomplete', $_POST)) {
         // update dogwalker completed count
         $sql = "SELECT wr.walkerid as walkerid, w.walksCompleted as walkscompleted
         FROM walkpost wp, walkrequest wr, dogwalker w
-        WHERE wp.referenceid = wr.walkid AND 
+        WHERE wp.referenceid = wr.walkid AND
         wr.walkerid = w.username AND
         wp.referenceid = $refID AND
         wr.confirmed = 1";
@@ -308,48 +308,76 @@ else {
         // show only results associated with user
         echo "<h2>Booked Walks:</h2>";
         // todo - join with walkrequest and show walker that booked the walk
-        $sql = "SELECT wp.referenceid as referenceid, wp.owner as owner, 
-        wp.dog as dog, 
-        wp.starttime as starttime, wp.startlocn as startlocn, 
-        wp.endtime as endtime, wp.endlocn as endlocn, 
-        wp.specialrequests as specialrequests, 
+        $sql = "SELECT wp.referenceid as referenceid, wp.owner as owner,
+        wp.dog as dog,
+        wp.starttime as starttime, wp.startlocn as startlocn,
+        wp.endtime as endtime, wp.endlocn as endlocn,
+        wp.specialrequests as specialrequests,
         wp.booked as booked, wp.completed as completed,
         wr.walkerid as walkerid
         FROM walkpost wp, walkrequest wr
-        WHERE 
+        WHERE
         referenceid = walkid AND
         wr.confirmed = 1 AND
-        booked = 1 AND 
-        completed = 0 
+        booked = 1 AND
+        completed = 0
         AND owner = '$user'";
         $resultbooked = $conn->query($sql);
         generateTable($resultbooked, true);
 
         echo "<h2>Unbooked Walks:</h2>";
-        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed
         FROM walkpost WHERE booked = 0 AND completed = 0 AND owner = '$user'";
         $resultunbooked = $conn->query($sql);
         generateTable($resultunbooked, false);
 
-        
+
     }
     else if ($usertype === "walker") {
+
         echo "<h2>Scheduled Walks:</h2>";
-        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
-        FROM walkpost WHERE booked = 1 AND completed = 0 AND 
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed
+        FROM walkpost WHERE booked = 1 AND completed = 0 AND
         referenceid in (SELECT walkid FROM walkrequest WHERE walkerid = '$user' AND confirmed = 1)";
         $result = $conn->query($sql);
         generateTable($result, true);
 
+        echo "<h3>Filter by:</h3>
+        <label>Dog Size:</label>
+        <form action='viewposts.php' method='post'>
+        <select name='size'>";
+
+
+       $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
+       $sql = "SELECT DISTINCT size FROM DogType";
+       $result = $conn->query($sql);
+       while ($row = $result->fetch_assoc()){
+           echo "<option value=\"".$row['size']."\">" . $row['size'] . "</option>";
+       }
+
+
+        echo "</select>
+        <input type='submit' name='submitFilter' value='Submit Filter'>
+        <input type='submit' name='cancelFilter' value='Cancel Filter'>
+        </form>";
+
+
         echo "<h2>Available Walks:</h2>";
-        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
-        FROM walkpost WHERE booked = 0 AND completed = 0";
+        if (array_key_exists('submitFilter', $_POST)) {
+            $size = $_POST['size'];
+            $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
+            FROM walkpost w, Dog d, DogType dt WHERE w.booked = 0 AND w.completed = 0 AND w.dog = d.name AND d.age = dt.age AND d.breed = dt.breed AND dt.size = '$size'";
+
+        } else {
+              $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
+              FROM walkpost w, Dog d, DogType dt WHERE w.booked = 0 AND w.completed = 0 AND w.dog = d.name AND d.age = dt.age AND d.breed = dt.breed";
+        }
         $result = $conn->query($sql);
         generateTable($result, false);
     }
     else {
         // show all results for anon user
-        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed
         FROM walkpost WHERE booked = 0 AND completed = 0";
         $result = $conn->query($sql);
         generateTable($result, false);
