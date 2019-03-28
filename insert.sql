@@ -143,12 +143,13 @@ INSERT INTO WalkRequest(walkerID, walkID, requestID, message, confirmed)
 	('hilda', 2, 2, 'like, your dog is rly cute', 0),
 	('igrid', 3, 3,  'I am here for dog walks', 0),
 	('joe', 4, 4, 'let me walk dogs pls thxs', 0),
-	('joe', 4, 6, 'walking ALL the dogs', 1),
-	('joe', 4, 7, 'walking ALL the dogs', 1),
-	('joe', 4, 8, 'walking ALL the dogs', 1),
-	('joe', 4, 9, 'walking ALL the dogs', 1),
-	('joe', 4, 10, 'walking ALL the dogs', 1),
-	('joe', 4, 11, 'walking ALL the dogs', 1);
+	('joe', 6, 5, 'walking ALL the dogs', 1),
+	('joe', 7, 6, 'walking ALL the dogs', 1),
+	('joe', 8, 7, 'walking ALL the dogs', 1),
+	('joe', 9, 8, 'walking ALL the dogs', 1),
+	('joe', 10, 9, 'walking ALL the dogs', 1),
+	('joe', 11, 10, 'walking ALL the dogs', 1);
+
 
 
 INSERT INTO Review(writtenBy, writtenFor, reviewID, rating, date, comment)

@@ -20,22 +20,32 @@ if ($usertype === "owner") {
     <button type='submit' style='padding: 15px 20px; font-size: 18px'>+ Add Walk</button>
     </form>";
 }
+include 'connect.php';
+$conn = OpenCon();
 ?>
 
 
-<h3>Filter by:</h3>
 <?php
 $usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
 if ($usertype === "walker") {
-    echo "<form action='viewposts_s.php'>
-    <button type='submit' style='padding: 10px 13px; font-size: 14px'>S</button>
-    </form>";
-    echo "<form action='viewposts_m.php'>
-    <button type='submit' style='padding: 10px 13px; font-size: 14px'>M</button>
-    </form>";
-    echo "<form action='viewposts_l.php'>
-    <button type='submit' style='padding: 10px 13px; font-size: 14px'>L</button>
-    </form>";
+
+echo "<h3>Filter by:</h3>
+<label>Dog Name:</label>
+<form action='viewposts.php' method='post'>
+<select name='size'>";
+
+
+   $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
+   $sql = "SELECT DISTINCT size FROM DogType";
+   $result = $conn->query($sql);
+   while ($row = $result->fetch_assoc()){
+       echo "<option value=\"".$row['size']."\">" . $row['size'] . "</option>";
+   }
+
+
+echo "</select>
+<input type='submit' name='submitFilter' value='Submit Filter'>
+</form>";
 }
 ?>
 
@@ -79,8 +89,8 @@ if ($usertype === "walker") {
 
 <?php
 
-include 'connect.php';
-$conn = OpenCon();
+//include 'connect.php';
+//$conn = OpenCon();
 $usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
 $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
 
@@ -239,13 +249,23 @@ else {
         $result = $conn->query($sql);
         generateTable($result, true);
 
-
-
         echo "<h2>Available Walks:</h2>";
-        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed
-        FROM walkpost WHERE booked = 0 AND completed = 0";
-        $result = $conn->query($sql);
-        generateTable($result, false);
+        if (array_key_exists('submitFilter', $_POST)) {
+            $size = $_POST['size'];
+            $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
+            FROM walkpost w, Dog d, DogType dt WHERE w.booked = 0 AND w.completed = 0 AND w.dog = d.name AND d.age = dt.age AND d.breed = dt.breed AND dt.size = '$size'";
+          //  $result = $conn->query($sql);
+          //  generateTable($result, false);
+      } else {
+            $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
+            FROM walkpost w, Dog d, DogType dt WHERE w.booked = 0 AND w.completed = 0 AND w.dog = d.name AND d.age = dt.age AND d.breed = dt.breed";
+          //  $result = $conn->query($sql);
+
+        //   generateTable($result, false);
+      }
+      $result = $conn->query($sql);
+      generateTable($result, false);
+
     }
     else {
         // show all results for anon user
