@@ -3,6 +3,18 @@
     * {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
+    button {
+        background-color: #4CAF50;
+        /* border:0.16em solid #666; */
+        border-radius:2em;
+        color: white;
+        padding: 5px 10px;
+        /* text-align: center;
+        text-decoration: none;
+        display: inline-block; */
+        font-size: 12px;
+        cursor: pointer;
+    }
 </style>
 </html>
 <div class="menu">
@@ -77,6 +89,12 @@ ORDER BY date desc";
 $result = $conn->query($sql);
 $numreviews = mysqli_num_rows($result);
 echo "<h2>Reviews (".$numreviews.")</h2>";
+if ($usertype === "owner") {
+    echo "<form action='writereview.php' method='post'>
+            <input type='hidden' name='walkerid' value='".$walker."'>
+            <button type='submit' name='postreview'>+ Write a Review'</button>
+            </form>";
+}
 displayReviews($result);
 echo "</center>";
 CloseCon($conn);
