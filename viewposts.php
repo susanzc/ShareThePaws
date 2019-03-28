@@ -13,14 +13,6 @@ if ($user != "") {
 ?>
 </div>
 <h1>Walk Posts</h1>
-<?php
-$usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
-if ($usertype === "owner") {
-    echo "<form action='addwalk.php'>
-    <button type='submit' style='padding: 15px 20px; font-size: 18px'>+ Add Walk</button>
-    </form>";
-}
-?>
 <html>
 <style>
     table {
@@ -72,8 +64,12 @@ function generateTable($result, $booked) {
         echo "<table><tr>
         <th class='border-class'>Walk Post ID</th>
         <th class='border-class'>Description</th>
-        <th class='borderclass'></th>
-        </tr>";
+        <th class='borderclass'></th>";
+        if ($usertype === "owner" && !$booked) {
+            // extra column for update
+            echo "<th class='borderclass'></th>";
+        }
+        echo "</tr>";
         // output data of each row
         while($row = $result->fetch_assoc()) {
         echo "<tr>
@@ -103,7 +99,13 @@ function generateTable($result, $booked) {
             <td class='borderclass'>
             <form action='viewposts.php' method='post'>
             <input type='hidden' name='refid' value='".$row["referenceid"]."'>
-            <button type='submit' name='deletepost' style='width: 80px; background-color: #F00'>Delete Post</button>
+            <button type='submit' name='editpost' style='width: 80px;'>Edit</button>
+            </form></td>";
+                echo "
+            <td class='borderclass'>
+            <form action='viewposts.php' method='post'>
+            <input type='hidden' name='refid' value='".$row["referenceid"]."'>
+            <button type='submit' name='deletepost' style='width: 80px; background-color: #F00'>Delete</button>
             </form></td>";
             }
             echo "</tr>";
@@ -180,6 +182,70 @@ else if (array_key_exists('deletepost', $_POST)) {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
+else if (array_key_exists('editpost', $_POST)) {
+    // return UI for edit
+    $refid = $_POST['refid'];
+    $sql = "SELECT dog, startlocn, endlocn, starttime, endtime, specialrequests
+    FROM walkpost WHERE referenceid = $refid";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $stime = strftime('%Y-%m-%dT%H:%M:%S', strtotime($row['starttime']));
+    $etime = strftime('%Y-%m-%dT%H:%M:%S', strtotime($row['endtime']));
+
+    // load current info - can change start/end locn and time and special requests only
+    
+    echo "<h2>Edit Walk Post ID = $refid</h2>";
+    echo "<div><b>Dog Name: </b>".$row['dog']."</div>";
+    echo "<form action='viewposts.php' method='post'>
+    <b>Start:</b>
+    <br>
+    <label>Time</label>
+    <input name='stime' type='datetime-local' value='".$stime."'>
+    <br>
+    <label>Location</label>
+    <input name='slocn' type='text' value='".$row['startlocn']."'>
+    <br>
+    <br>
+    <b>End:</b>
+    <br>
+    <label>Time</label>
+    <input name='etime' type='datetime-local' value='".$etime."'>
+    <br>
+    <label>Location</label>
+    <input name='elocn' type='text' value='".$row['endlocn']."'>
+    <br>
+    <br>
+    <label>Special Requests:</label><br>
+    <textarea class='text' cols='70' rows ='5' name='requests'>".$row['specialrequests']."</textarea>
+    <br><br>
+    <input type='hidden' name='refid' value='".$refid."'>
+    <button type='submit' name='submitupdate' value='Update Post'>Update Post</button>
+   </form>";
+   echo "<form action='viewposts.php'><button type='submit'>Cancel</button></form>";
+}
+else if (array_key_exists('submitupdate', $_POST)) {
+    $refid = $_POST['refid'];
+    $stime = date("Y-m-d H:i:s", strtotime($_POST['stime']));
+    $slocn = $_POST['slocn'];
+    $etime = date("Y-m-d H:i:s", strtotime($_POST['etime']));
+    $elocn = $_POST['elocn'];
+    $requests = $_POST['requests'];
+    $sql = "UPDATE walkpost SET starttime = '$stime', startlocn = '$slocn', 
+    endtime = '$etime', endlocn = '$elocn', 
+    specialrequests = '$requests' where referenceid = $refid";
+    $result = $conn->query($sql);
+    if ($result === TRUE) {
+        echo "<br><div>Walk post with ID = $refid successfully updated!</div><br>";
+        echo "<form action='viewposts.php'>
+        <button type='submit'>View Walk Posts</button>
+    </form>";
+    }
+    else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+
+}
 else if (array_key_exists('markcomplete', $_POST)) {
     $refID = (int)$_POST['refid'];
     $sql = "update walkpost set completed = 1 where referenceid = $refID";
@@ -197,6 +263,9 @@ else if (array_key_exists('markcomplete', $_POST)) {
 else {
     // main display with tables
     if ($usertype === "owner") {
+        echo "<form action='addwalk.php'>
+        <button type='submit' style='padding: 15px 20px; font-size: 18px'>+ Add Walk</button>
+        </form>";
         // show only results associated with user
         echo "<h2>Booked Walks:</h2>";
         // todo - join with walkrequest and show walker that booked the walk
