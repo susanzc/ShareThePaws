@@ -25,7 +25,7 @@
 </style>
 </html>
 <div class="menu">
-<a href="index.html">Home</a> ---  
+<a href="index.html">Home</a> ---
 <a href="dogmeetups.php">Dog Meetups</a> ---
 <a href="collections.php">Collections</a> ---
 <a href="viewrequests.php">Walk Requests</a> ---
@@ -36,11 +36,11 @@ $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
 $usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
 if ($user != "") {
     if ($usertype == "walker") {
-        echo "<div style='float: right'>Hello, 
+        echo "<div style='float: right'>Hello,
         <a href='walker.php?walker=".$user."'><b>$user</b></a></div>";
     }
     else if ($usertype == "owner") {
-        echo "<div style='float: right'>Hello, 
+        echo "<div style='float: right'>Hello,
         <a href='owner.php?owner=".$user."'><b>$user</b></a></div>";
     }
     else echo "<div style='float: right'>Hello, <b>$user</b></div>";
@@ -177,7 +177,7 @@ else if (array_key_exists('approverequest', $_POST)) {
 else {
     if ($usertype == "walker") {
         // confirmed but not completed requests
-        $sql = "SELECT walkerid, walkid, requestid, message FROM walkrequest 
+        $sql = "SELECT walkerid, walkid, requestid, message FROM walkrequest
         WHERE confirmed = 1 AND walkerid = '$user' AND walkid IN
         (
             SELECT referenceid as walkid
@@ -188,18 +188,30 @@ else {
         echo "
         <h2>Confirmed Requests:</h2>";
         generateWalkerTable($result, true);
-        
+
         // pending requests
-        $sql = "SELECT walkerid, walkid, requestid, message FROM walkrequest 
+        $sql = "SELECT walkerid, walkid, requestid, message FROM walkrequest
         WHERE confirmed = 0 AND walkerid = '$user'";
         $result = $conn->query($sql);
         echo "
         <h2>Pending Requests:</h2>";
         generateWalkerTable($result, false);
+
+        $sql = "SELECT walkerid, walkid, requestid, message FROM walkrequest
+        WHERE confirmed = 1 AND walkerid = '$user' AND walkid IN
+        (
+            SELECT referenceid as walkid
+            FROM walkpost
+            WHERE completed = 1
+        )";
+        $result = $conn->query($sql);
+        echo "
+        <h2>Finished Requests:</h2>";
+        generateWalkerTable($result, true);
     }
     else if ($usertype == "owner") {
         // only pending requests for the owner's posts
-        $sql = "SELECT wr.walkerid as walkerid, 
+        $sql = "SELECT wr.walkerid as walkerid,
         wr.walkid as walkid, wr.requestid as requestid, wr.message as message
         FROM walkrequest wr, walkpost wp
         WHERE wr.walkid = wp.referenceid AND wp.owner = '$user' AND wr.confirmed = 0";
