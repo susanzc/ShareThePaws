@@ -1,14 +1,22 @@
-
 <div class="menu">
 <a href="index.html">Home</a> ---  
 <a href="dogmeetups.php">Dog Meetups</a> ---
 <a href="viewrequests.php">Walk Requests</a> ---
-<a href="viewposts.php">Walk Posts</a>
+<a href="viewposts.php">Walk Posts</a> ---
 <?php
 session_start();
 $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
+$usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
 if ($user != "") {
-    echo "<div style='float: right'>Hello, <b>$user</b></div>";
+    if ($usertype == "walker") {
+        echo "<div style='float: right'>Hello, 
+        <a href='walker.php?walker=".$user."'><b>$user</b></a></div>";
+    }
+    else if ($usertype == "owner") {
+        echo "<div style='float: right'>Hello, 
+        <a href='owner.php?owner=".$user."'><b>$user</b></a></div>";
+    }
+    else echo "<div style='float: right'>Hello, <b>$user</b></div>";
 }
 ?>
 </div>
@@ -63,19 +71,23 @@ function generateTable($result, $booked) {
     if ($result->num_rows > 0) {
         echo "<table><tr>
         <th class='border-class'>Walk Post ID</th>
-        <th class='border-class'>Description</th>
-        <th class='borderclass'></th>";
+        <th class='border-class'>Description</th>";
         if ($usertype === "owner" && !$booked) {
             // extra column for update
             echo "<th class='borderclass'></th>";
         }
-        echo "</tr>";
+        else if ($usertype === "owner" && $booked) {
+            // extra column for walker username
+            echo "<th class='borderclass'>Walker</th>";
+
+        }
+        echo "<th class='borderclass'></th></tr>";
         // output data of each row
         while($row = $result->fetch_assoc()) {
         echo "<tr>
         <td class='borderclass'>".$row["referenceid"]."</td>
         <td class='borderclass'>
-        <div style='padding: 2pt'><b>Posted By: </b>".$row["owner"]."</div>
+        <div style='padding: 2pt'><b>Posted By: </b><a href='owner.php?owner=".$row['owner']."'>".$row["owner"]."</a></div>
         <div style='padding: 2pt'><b>Dog Name: </b>".$row["dog"]."</div>
         <div style='padding: 2pt'><b>Start Time: </b>".$row["starttime"]."</div>
         <div style='padding: 2pt'><b>Start Location: </b>".$row["startlocn"]."</div>
@@ -86,7 +98,9 @@ function generateTable($result, $booked) {
         if ($usertype === "owner") {
             if ($booked) {
             echo "
-            
+            <td class='borderclass'>
+            <a href='walker.php?walker=".$row['walkerid']."'>".$row['walkerid']."</a>
+            </td>
             <td class='borderclass'>
             <form action='viewposts.php' method='post'>
             <input type='hidden' name='refid' value='".$row["referenceid"]."'>
@@ -251,10 +265,32 @@ else if (array_key_exists('markcomplete', $_POST)) {
     $sql = "update walkpost set completed = 1 where referenceid = $refID";
     $result = $conn->query($sql);
     if ($result === TRUE) {
-        echo "<br><div>Walk post with ID = $refID marked as complete!</div><br>";
-        echo "<form action='viewposts.php'>
-        <button type='submit'>View Walk Posts</button>
-    </form>";
+        // update dogwalker completed count
+        $sql = "SELECT wr.walkerid as walkerid, w.walksCompleted as walkscompleted
+        FROM walkpost wp, walkrequest wr, dogwalker w
+        WHERE wp.referenceid = wr.walkid AND 
+        wr.walkerid = w.username AND
+        wp.referenceid = $refID AND
+        wr.confirmed = 1";
+        $result = $conn->query($sql);
+        $row = $result->fetch_assoc();
+        $count = $row['walkscompleted'] + 1;
+        $walkerid = $row['walkerid'];
+        $sql = "UPDATE dogwalker SET walkscompleted = $count WHERE username = '$walkerid'";
+        $result = $conn->query($sql);
+        if ($result === TRUE) {
+            echo "<br><div>Walk post with ID = $refID marked as complete!</div><br>";
+            echo "<form action='writereview.php' method='post'>
+            <input type='hidden' name='walkerid' value='".$walkerid."'>
+            <button type='submit' name='postreview'>Write a Review for ".$walkerid."</button>
+            </form>";
+            echo "<form action='viewposts.php'>
+            <button type='submit'>View Walk Posts</button>
+            </form>";
+        }
+        else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
     }
     else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -269,8 +305,20 @@ else {
         // show only results associated with user
         echo "<h2>Booked Walks:</h2>";
         // todo - join with walkrequest and show walker that booked the walk
-        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
-        FROM walkpost WHERE booked = 1 AND completed = 0 AND owner = '$user'";
+        $sql = "SELECT wp.referenceid as referenceid, wp.owner as owner, 
+        wp.dog as dog, 
+        wp.starttime as starttime, wp.startlocn as startlocn, 
+        wp.endtime as endtime, wp.endlocn as endlocn, 
+        wp.specialrequests as specialrequests, 
+        wp.booked as booked, wp.completed as completed,
+        wr.walkerid as walkerid
+        FROM walkpost wp, walkrequest wr
+        WHERE 
+        referenceid = walkid AND
+        wr.confirmed = 1 AND
+        booked = 1 AND 
+        completed = 0 
+        AND owner = '$user'";
         $resultbooked = $conn->query($sql);
         generateTable($resultbooked, true);
 

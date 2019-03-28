@@ -2,12 +2,21 @@
 <a href="index.html">Home</a> ---  
 <a href="dogmeetups.php">Dog Meetups</a> ---
 <a href="viewrequests.php">Walk Requests</a> ---
-<a href="viewposts.php">Walk Posts</a>
+<a href="viewposts.php">Walk Posts</a> ---
 <?php
 session_start();
 $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
+$usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
 if ($user != "") {
-    echo "<div style='float: right'>Hello, <b>$user</b></div>";
+    if ($usertype == "walker") {
+        echo "<div style='float: right'>Hello, 
+        <a href='walker.php?walker=".$user."'><b>$user</b></a></div>";
+    }
+    else if ($usertype == "owner") {
+        echo "<div style='float: right'>Hello, 
+        <a href='owner.php?owner=".$user."'><b>$user</b></a></div>";
+    }
+    else echo "<div style='float: right'>Hello, <b>$user</b></div>";
 }
 ?>
 </div>
@@ -55,7 +64,7 @@ function generateOwnerTable($result) {
     </tr>";
     // output data of each row
     while($row = $result->fetch_assoc()) {
-     echo "<tr><td class='borderclass'>".$row["walkerid"]."</td>
+     echo "<tr><td class='borderclass'><a href='walker.php?walker=".$row["walkerid"]."'>".$row["walkerid"]."</a></td>
      <td class='borderclass'>".$row["walkid"]."</td>
      <td class='borderclass'>".$row["message"]."</td>
      <td class='borderclass'>
@@ -92,7 +101,7 @@ function generateWalkerTable($result, $confirmed) {
     </tr>";
     // output data of each row
     while($row = $result->fetch_assoc()) {
-    echo "<tr><td class='borderclass'>".$row["walkerid"]."</td>
+    echo "<tr><td class='borderclass'><a href='walker.php?walker=".$row["walkerid"]."'>".$row["walkerid"]."</a></td>
     <td class='borderclass'>".$row["walkid"]."</td>
     <td class='borderclass'>".$row["message"]."</td>
     <td class='borderclass'>
