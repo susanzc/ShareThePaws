@@ -15,18 +15,18 @@ INSERT INTO walkerNameNum(Name, phoneNum)
 	('Joseph Aramathia', '0555555555');
 
 INSERT INTO DogOwner(Username, Password, userImage, PhoneNum)
-	VALUES ('alice', 'password', 'alice.jpg', '1111111111'),
-	('bob', 'password', 'bob.jpg', '2222222222'),
-	('carrie', 'password', 'carrie.jpg', '3333333333'),
-	('dillan', 'password', 'dillan.jpg', '4444444444'),
-	('edger', 'password', 'edger.jpg', '5555555555');
+	VALUES ('alice', 'password', 'default.jpg', '1111111111'),
+	('bob', 'password', 'default.jpg', '2222222222'),
+	('carrie', 'password', 'default.jpg', '3333333333'),
+	('dillan', 'password', 'default.jpg', '4444444444'),
+	('edger', 'password', 'default.jpg', '5555555555');
 
 INSERT INTO DogWalker(Username, Password, userImage, PhoneNum, personalBio,  WalksCompleted)
 	VALUES ('feres', 'password', 'feres.jpg', '0111111111', 'Just here to walk some dogs',0),
-	('george', 'password', 'george.jpg', '0222222222', 'a dog walker', 0),
-	('hilda', 'password', 'hilda.jpg', '0333333333', 'give me dogs', 1),
-	('igrid', 'password', 'igrid.jpg', '0444444444', 'i like walks', 1),
-	('joe', 'password', 'joe.jpg', '0555555555', 'give me walks', 0);
+	('george', 'password', 'default.jpg', '0222222222', 'a dog walker', 0),
+	('hilda', 'password', 'default.jpg', '0333333333', 'give me dogs', 1),
+	('igrid', 'password', 'default.jpg', '0444444444', 'i like walks', 1),
+	('joe', 'password', 'default.jpg', '0555555555', 'give me walks', 0);
 
 INSERT INTO DogType(age, breed, size)
 	VALUES (1, 'golden retriever', 'S'),

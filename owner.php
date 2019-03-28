@@ -68,8 +68,13 @@ WHERE do.phonenum = onn.phonenum AND
 do.username = '$owner'";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
+
+echo "<div style='display: flex; width: 500px'>";
+echo "<div style='padding-right: 20px'><img width='200px' src='uploads/".$row['userimage']."'></div>";
+echo "<div style='text-align: left'>";
 echo "<div><b>Name: </b>".$row['name']."</div>";
 echo "<div><b>Phone Number: </b>".$row['phonenum']."</div>";
+echo "</div></div>";
 
 if ($owner === $user) {
     // can add dog
@@ -103,7 +108,7 @@ else if (array_key_exists('submitdog', $_POST)) {
     $breed = $_POST['breed'];
     $gender = $_POST['gender'];
 
-    $target_dir = dirname(getcwd())."/uploads/";
+    $target_dir = dirname(getcwd())."/htdocs/uploads/";
     $imgname = basename($_FILES["image"]["name"]);
     $target_file = $target_dir . $imgname;
     $uploadOk = 1;

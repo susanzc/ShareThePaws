@@ -36,7 +36,7 @@ function displayReviews($result) {
     while($row = $result->fetch_assoc()) {
         echo "<div style='margin: 10px; width: 500px; border-radius: 1em; background-color: whitesmoke; padding: 10px; border-width: 1px; border-style: solid'>";
         echo "<div><b>Date: </b>".substr($row['date'], 0, 10)."</div>";
-        echo "<div><b>Written By: </b>".$row['writtenby']."</div>";
+        echo "<div><b>Written By: </b><a href='owner.php?owner=".$row['writtenby']."'>".$row['writtenby']."</a></div>";
         echo "<div><b>Rating: </b>".$row['rating']."/5</div>";
         echo "<div><b>Comments: </b>".$row['comment']."</div>";
         echo"</div>";
@@ -52,6 +52,9 @@ WHERE dw.phonenum = wnn.phonenum AND
 dw.username = '$walker'";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
+echo "<div style='display: flex; width: 500px'>";
+echo "<div style='padding-right: 20px'><img width='200px' src='uploads/".$row['userimage']."'></div>";
+echo "<div style='text-align: left'>";
 echo "<div><b>Name: </b>".$row['name']."</div>";
 echo "<div><b>Phone Number: </b>".$row['phonenum']."</div>";
 echo "<div><b>Personal Bio: </b>".$row['personalbio']."</div>";
@@ -64,6 +67,7 @@ WHERE writtenfor = '$walker'";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
 echo "<div><b>Average Rating: </b>".number_format($row['average'], 2)."</div>";
+echo "</div></div>";
 
 $sql = "SELECT writtenby, reviewid, rating, date, comment
 FROM review

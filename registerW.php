@@ -33,7 +33,7 @@ if ($user != "") {
 </div>
 <center>
 <h2>Register as a Dog Walker</h2>
-<form action="registerW.php" method="post">
+<form action="registerW.php" method="post" enctype="multipart/form-data">
  <br>
  <label>Username:</label>
  <input name="username" type="text" placeholder="Type Here">
@@ -46,7 +46,7 @@ if ($user != "") {
  <br>
  <br>
  <label>Display Image (optional):</label>
- <input name="userImage" type="file" placeholder="Type Here">
+ <input name="image" type="file" accept="image/*">
  <br><br>
  <label>Phone:</label>
  <input name="phoneNum" type="text" placeholder="Type Here">
@@ -72,7 +72,6 @@ if (array_key_exists('registration', $_POST)) {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $personalBio = $_POST['personalBio'];
-    $userImage = $_POST['userImage'];
     $phoneNum = $_POST['phoneNum'];
     $name = $_POST['name'];
     //$walkerorowner = $_POST['walkerorowner'];
@@ -80,10 +79,39 @@ if (array_key_exists('registration', $_POST)) {
         echo "Please fill out all inputs.";
     }
     else {
+        $target_dir = dirname(getcwd())."/htdocs/uploads/";
+        $imgname = basename($_FILES["image"]["name"]);
+        $target_file = $target_dir . $imgname;
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+        
+        // Check file size
+        if ($_FILES["image"]["size"] > 500000) {
+            echo "Sorry, your file is too large. ";
+            $uploadOk = 0;
+        }
+        // Allow certain file formats
+        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+        && $imageFileType != "gif" ) {
+            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            $uploadOk = 0;
+        }
+        // Check if $uploadOk is set to 0 by an error
+        if ($uploadOk == 0) {
+            echo "Sorry, your file was not uploaded.";
+        // if everything is ok, try to upload file
+        } else {
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                //echo "The file ". basename( $_FILES["image"]["name"]). " has been uploaded.";
+            } else {
+                echo "Sorry, there was an error uploading your file.";
+            }
+        }
+
       $sql = "insert into walkerNameNum values('$phoneNum','$name')";
       $result = $conn->query($sql);
       if ($result === TRUE) {
-        $sql = "insert into dogwalker values ('$username', '$password', '$userImage', '$phoneNum','$personalBio',0)";
+        $sql = "insert into dogwalker values ('$username', '$password', '$imgname', '$phoneNum','$personalBio',0)";
         $result = $conn->query($sql);
         if ($result === TRUE) {
             echo "<div>Account with username = $username created successfully!</div><br>";
