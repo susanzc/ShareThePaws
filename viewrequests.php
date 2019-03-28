@@ -1,3 +1,29 @@
+<html>
+<style>
+    * {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    table {
+        width: 80%;
+        border: 1px solid black;
+    }
+
+    th {
+        font-size: 11pt;
+        background: #666;
+        color: #FFF;
+        padding: 2px 6px;
+        border-collapse: separate;
+        border: 1px solid #000;
+    }
+
+    td {
+        font-size: 11pt;
+        border: 1px solid #DDD;
+        color: black;
+    }
+</style>
+</html>
 <div class="menu">
 <a href="index.html">Home</a> ---  
 <a href="dogmeetups.php">Dog Meetups</a> ---
@@ -21,31 +47,6 @@ if ($user != "") {
 ?>
 </div>
 <h1>Walk Requests</h1>
-<html>
-<style>
-    table {
-        width: 80%;
-        border: 1px solid black;
-    }
-
-    th {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11pt;
-        background: #666;
-        color: #FFF;
-        padding: 2px 6px;
-        border-collapse: separate;
-        border: 1px solid #000;
-    }
-
-    td {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11pt;
-        border: 1px solid #DDD;
-        color: black;
-    }
-</style>
-</html>
 <?php
 include 'connect.php';
 $conn = OpenCon();

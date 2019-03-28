@@ -1,5 +1,23 @@
 <!DOCTYPE html>
 <html>
+<style>
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        button {
+            background-color: #4CAF50;
+            /* border:0.16em solid #666; */
+            border-radius:2em;
+            color: white;
+            margin: 10px;
+            padding: 5px 10px;
+            /* text-align: center;
+            text-decoration: none;
+            display: inline-block; */
+            font-size: 14px;
+            cursor: pointer; 
+        }
+    </style>
 <body>
 
 <div class="menu">
@@ -9,19 +27,20 @@
 <a href="viewposts.php">Walk Posts</a>
 </div>
 
+<center>
 <h1>Welcome to Share the Paws!</h1>
 <p style="font-weight: 900">User Login:</p>
 <form action="/login.php" method="post">
     username: <input type="text" name="username"><br>
     password: <input type="password" name="password"><br>
-    <input type="submit" value="Login">
+    <button type="submit" value="Login">Login</button>
 </form>
 <br>
 <span>Don't have an account? </span>
 <br>
-<a href="registerO.php">Register for Owner</a>
+<a href="registerO.php">Register as a Dog Owner</a>
 <br>
-<a href="registerW.php">Register for Walker</a>
-
+<a href="registerW.php">Register as a Dog Walker</a>
+</center>
 </body>
 </html>

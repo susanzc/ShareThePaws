@@ -1,3 +1,22 @@
+<html>
+<style>
+    * {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    button {
+        background-color: #4CAF50;
+        /* border:0.16em solid #666; */
+        border-radius:2em;
+        color: white;
+        padding: 10px 15px;
+        /* text-align: center;
+        text-decoration: none;
+        display: inline-block; */
+        font-size: 14px;
+        cursor: pointer; 
+    }
+</style>
+</html>
 <div class="menu">
 <a href="index.html">Home</a> ---  
 <a href="dogmeetups.php">Dog Meetups</a> ---
@@ -46,6 +65,49 @@ $result = $conn->query($sql);
 $row = $result->fetch_assoc();
 echo "<div><b>Name: </b>".$row['name']."</div>";
 echo "<div><b>Phone Number: </b>".$row['phonenum']."</div>";
+
+if ($owner === $user) {
+    // can add dog
+    echo "<br><br><form action='owner.php?owner=".$owner."' method='post'>";
+    echo "<button type='submit' name='adddog'>+ Add Dog</button>";
+    echo "</form>";
+}
+if (array_key_exists('adddog', $_POST)) {
+    $sql = "SELECT distinct breed from dogtype";
+    $result = $conn->query($sql);
+    echo "<form action='owner.php?owner=".$owner."' method='post'>";
+    echo "<label>Dog Name: </label><input type='text' name='name'><br><br>";
+    echo "<label>Age: </label><input type='number' name='age'><br><br>";
+
+    echo "<label>Breed: </label><select name='breed'>";
+
+    while ($row = $result->fetch_assoc()){
+        echo "<option value=\"".$row['breed']."\">" . $row['breed'] . "</option>";
+    }
+    echo "</select><br><br>";
+    echo "<label>Gender: </label><select name='gender'>
+    <option value=\"M\">M</option>
+    <option value=\"F\">F</option>
+    </select><br><br>";
+    echo "<label>Upload Image (optional): </label><input type='file' name='image'><br><br>";
+    echo "<input type='submit' name='submitdog' value='Submit'></form>";
+}
+else if (array_key_exists('submitdog', $_POST)) {
+    $name = $_POST['name'];
+    $age = $_POST['age'];
+    $breed = $_POST['breed'];
+    $gender = $_POST['gender'];
+    $image = $_POST['image'];
+
+    $sql = "INSERT into dog VALUES ('$name', $age, '$gender', '$breed', '$image', '$owner')";
+    $result = $conn->query($sql);
+    if ($result === TRUE) {
+        echo "<br><div>Dog added successfully!</div><br>";
+    }
+    else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
 
 $sql = "SELECT d.name as name, d.age as age, d.gender as gender, d.breed as breed,
 d.dogimage as dogimage, dt.size as size

@@ -1,3 +1,10 @@
+<html>
+<style>
+    * {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+</style>
+</html>
 <div class="menu">
 <a href="index.html">Home</a> ---
 <a href="dogmeetups.php">Dog Meetups</a> ---
@@ -7,9 +14,7 @@
 session_start();
 $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
 if ($user != "") {
-    echo "<div style='float: right'>You Already Have an Account <b>$user</b></div>";
-} else {
-  echo "<div style='float: right'>Welcome!</div>";
+    echo "<div style='float: right'>Currently logged in as <b>$user</b></div>";
 }
 ?>
 </div>
@@ -17,26 +22,23 @@ if ($user != "") {
  <br>
  <br>
  <label>Username:</label>
- <br>
  <input name="username" type="text" placeholder="Type Here">
- <br>
+ <br><br>
  <label>Password:</label>
  <input name="password" type="password" placeholder="Type Here">
- <br>
- <label>Name:</label>
- <br>
+ <br><br>
+ <label>Full Name:</label>
  <input name="name" type="text" placeholder="Type Here">
  <br>
  <br>
  <label>Image:</label>
  <b>Select a file</b>
  <input name="userImage" type="file" placeholder="Type Here">
- <br>
+ <br><br>
  <label>Phone:</label>
  <input name="phoneNum" type="text" placeholder="Type Here">
- <br>
+ <br><br>
  <label>personalBio:</label>
- <br>
  <input name="personalBio" type="text" placeholder="Type Here">
  <!-- <label>Are u a Walker or Owner</label>
  <select name="walkerorowner">
@@ -60,7 +62,7 @@ if (array_key_exists('registration', $_POST)) {
     $phoneNum = $_POST['phoneNum'];
     $name = $_POST['name'];
     //$walkerorowner = $_POST['walkerorowner'];
-    if (!$username || !$password || !$userImage || !$phoneNum|| !$personalBio||!$name) {
+    if (!$username || !$password || !$phoneNum|| !$personalBio||!$name) {
         echo "Please fill out all inputs.";
     }
     else {
@@ -71,9 +73,10 @@ if (array_key_exists('registration', $_POST)) {
         $result = $conn->query($sql);
         if ($result === TRUE) {
             echo "<div>Account with username = $username created successfully!</div><br>";
-            echo "<form action='viewaccount.php'>
-        <button type='submit'>View Account</button>
-       </form>";
+            echo "<form action='login.php' method='post'>
+            <input type='hidden' name='username' value='".$username."'>
+            <input type='hidden' name='password' value='".$password."'>
+        <button type='submit'>Login</button></form>";
         }
         else {
             echo "Error: " . $sql . "<br>" . $conn->error;

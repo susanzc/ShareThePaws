@@ -1,3 +1,10 @@
+<html>
+<style>
+    * {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+</style>
+</html>
 <div class="menu">
 <a href="index.html">Home</a> ---  
 <a href="dogmeetups.php">Dog Meetups</a> ---

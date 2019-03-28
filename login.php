@@ -1,3 +1,10 @@
+<html>
+<style>
+    * {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+</style>
+</html>
 <div class="menu">
 <a href="index.html">Home</a> ---  
 <a href="dogmeetups.php">Dog Meetups</a> ---
@@ -18,13 +25,13 @@ if ($result->num_rows > 0) {
     $pass = $row["password"];
     if ($pass != $password) {
         echo "<h1>Welcome to Share the Paws!</h1>";
-        echo "<br><div>Incorrect username/password combination, please try again</div>";
+        echo "<br><div>Incorrect username/password combination, <a href='index.html'>please try again</a>.</div>";
     }
     else {
         $_SESSION["user"] = $username;
         $_SESSION["usertype"] = "owner";
         echo "<h1>Welcome to Share the Paws!</h1>";
-        echo "<br><div>Login successful! Welcome, ".$username."</div>";
+        echo "<br><div>Login successful! Welcome, <a href='owner.php?owner=".$username."'>".$username."</a></div>";
     }
 }
 else {
@@ -35,18 +42,18 @@ else {
         $pass = $row["password"];
         if ($pass != $password) {
             echo "<h1>Welcome to Share the Paws!</h1>";
-            echo "<br><div>Incorrect username/password combination, please try again</div>";
+            echo "<br><div>Incorrect username/password combination, <a href='index.html'>please try again</a>.</div>";
         }
         else {
             $_SESSION["user"] = $username;
             $_SESSION["usertype"] = "walker";
             echo "<h1>Welcome to Share the Paws!</h1>";
-            echo "<br><div>Login successful!</div>";
+            echo "<br><div>Login successful! Welcome, <a href='walker.php?walker=".$username."'>".$username."</a></div>";
         }
     }
     else {
         echo "<h1>Welcome to Share the Paws!</h1>";
-        echo "<br><div>Incorrect username/password combination, please try again</div>";
+        echo "<br><div>Incorrect username/password combination, <a href='index.html'>please try again</a>.</div>";
     }
 }
 ?>

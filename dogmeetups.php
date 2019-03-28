@@ -1,3 +1,41 @@
+<html>
+<style>
+    * {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    table {
+        width: 80%;
+        border: 1px solid black;
+    }
+
+    th {
+        font-size: 11pt;
+        background: #666;
+        color: #FFF;
+        padding: 2px 6px;
+        border-collapse: separate;
+        border: 1px solid #000;
+    }
+
+    td {
+        font-size: 11pt;
+        border: 1px solid #DDD;
+        color: black;
+    }
+    button {
+            background-color: #4CAF50;
+            /* border:0.16em solid #666; */
+            border-radius:2em;
+            color: white;
+            padding: 5px 10px;
+            /* text-align: center;
+            text-decoration: none;
+            display: inline-block; */
+            font-size: 14px;
+            cursor: pointer; 
+        }
+</style>
+</html>
 <div class="menu">
 <a href="index.html">Home</a> ---  
 <a href="dogmeetups.php">Dog Meetups</a> ---
@@ -22,44 +60,15 @@ if ($user != "") {
 </div>
 <h1>Dog Meetups</h1>
 <?php
+include 'connect.php';
+$conn = OpenCon();
 $usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
 if ($usertype == "owner") {
 echo "<form action='dogmeetups.php' method='post'>
     <button type='submit' name='createmeetup'>Create Meetup Event</button>
 </form>";
 }
-?>
-
-<html>
-<style>
-    table {
-        width: 80%;
-        border: 1px solid black;
-    }
-
-    th {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11pt;
-        background: #666;
-        color: #FFF;
-        padding: 2px 6px;
-        border-collapse: separate;
-        border: 1px solid #000;
-    }
-
-    td {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11pt;
-        border: 1px solid #DDD;
-        color: black;
-    }
-</style>
-</html>
-<?php
-include 'connect.php';
-$conn = OpenCon();
 $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
-$usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
 if (array_key_exists('submitmeetup', $_POST)) {
     $time = $_POST['time'];
     $locn = $_POST['locn'];
