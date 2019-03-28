@@ -1,47 +1,14 @@
-
-<head>
-  <div class="menu">
-  <a href="index.html">Home</a> ---
-  <a href="viewdogs.php">Dogs</a> ---
-  <a href="dogmeetups.php">Dog Meetups</a> ---
-  <a href="viewrequests.php">Walk Requests</a> ---
-  <a href="viewposts.php">Walk Posts</a>
-  <?php
-  session_start();
-  $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
-  if ($user != "") {
-      echo "<div style='float: right'>Hello, <b>$user</b></div>";
-  }
-  ?>
-  </div>
-<title>All Dogs</title>
-
-</head>
-<body>
-<div class="container">
-<div class="main">
-<h2>Select Elements:</h2>
-<form action="viewdogs.php" method="post">
-<label class="heading">Select Elements::</label>
-<input type="checkbox" name="check_list[]" value="name"><label>Name</label>
-<input type="checkbox" name="check_list[]" value="age"><label>Age</label>
-<input type="checkbox" name="check_list[]" value="breed"><label>Breed</label>
-<input type="checkbox" name="check_list[]" value="dogImage"><label>Image</label>
-<input type="checkbox" name="check_list[]" value="owner"><label>Owner</label>
-<input type="submit" name="submit" Value="Submit"/>
-</form>
-</div>
-</div>
-</body>
 <html>
 <style>
+    * {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
     table {
-        width: 80%;
         border: 1px solid black;
+        width: 70%;
     }
 
     th {
-        font-family: Arial, Helvetica, sans-serif;
         font-size: 11pt;
         background: #666;
         color: #FFF;
@@ -50,15 +17,74 @@
         border: 1px solid #000;
     }
 
+    input {
+      margin: 15px 5px;
+    }
+
     td {
-        font-family: Arial, Helvetica, sans-serif;
         font-size: 11pt;
         border: 1px solid #DDD;
         color: black;
     }
+
+    button {
+        background-color: #4CAF50;
+        /* border:0.16em solid #666; */
+        border-radius:2em;
+        color: white;
+        padding: 5px 10px;
+        /* text-align: center;
+        text-decoration: none;
+        display: inline-block; */
+        font-size: 12px;
+        cursor: pointer; 
+    }
 </style>
 </html>
-
+<div class="menu">
+<a href="index.html">Home</a> ---  
+<a href="dogmeetups.php">Dog Meetups</a> ---
+<a href="viewdogs.php">Dog Collection</a> ---
+<a href="viewrequests.php">Walk Requests</a> ---
+<a href="viewposts.php">Walk Posts</a> ---
+<?php
+session_start();
+$user = isset($_SESSION["user"])? $_SESSION["user"] : "";
+$usertype = isset($_SESSION["usertype"])? $_SESSION["usertype"] : "";
+if ($user != "") {
+    if ($usertype == "walker") {
+        echo "<div style='float: right'>Hello, 
+        <a href='walker.php?walker=".$user."'><b>$user</b></a></div>";
+    }
+    else if ($usertype == "owner") {
+        echo "<div style='float: right'>Hello, 
+        <a href='owner.php?owner=".$user."'><b>$user</b></a></div>";
+    }
+    else echo "<div style='float: right'>Hello, <b>$user</b></div>";
+}
+?>
+</div>
+<body>
+<center>
+<div class="container">
+<div class="main">
+<h2>Share The Paws: Dog Collection</h2>
+<p style="color: grey; font-style: italic">View information about all the dogs registered in Share the Paws!</p>
+<form action="viewdogs.php" method="post">
+<label class="heading" style="font-weight: bold;">Select Attributes:</label><br>
+<input type="checkbox" name="check_list[]" value="name"><label>Name </label>
+<input type="checkbox" name="check_list[]" value="age"><label>Age </label>
+<input type="checkbox" name="check_list[]" value="breed"><label>Breed </label>
+<input type="checkbox" name="check_list[]" value="dogImage"><label>Image </label>
+<input type="checkbox" name="check_list[]" value="owner"><label>Owner </label>
+<br>
+<button type="submit" name="submit" Value="Submit"/>Submit</button>
+</form>
+</div>
+</div>
+</center>
+</body>
+<center>
 <!--- Including PHP Script ----->
 <?php
 include 'connect.php';
@@ -76,14 +102,14 @@ $checked_count = count($_POST['check_list']);
 echo "You have selected following ".$checked_count." option(s): <br/>";
 // Loop to store and display values of individual checked checkbox.
 foreach($_POST['check_list'] as $selected) {
-echo "<p>".$selected ."</p>";
+echo "<div>- ".$selected ."</div>";
 }
 $sql = "select ".implode(', ',$_POST['check_list'])." from Dog";
-echo "string".$sql."line 57";
+//echo "string".$sql."line 57";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
   // code...
-  echo "<table><tr>";
+  echo "<br><table><tr>";
   foreach ($_POST['check_list'] as $value) {
     echo "<th class='border-class'>".$value."</th>";
   }
@@ -104,8 +130,9 @@ if ($result->num_rows > 0) {
 }
 }
 else{
-echo "<b>Please Select Atleast One Option.</b>";
+echo "<b>Please select at least one option.</b>";
 }
 }
 CloseCon($conn);
 ?>
+</center>
