@@ -20,9 +20,9 @@
 <div class="menu">
 <a href="index.html">Home</a> ---  
 <a href="dogmeetups.php">Dog Meetups</a> ---
-<a href="viewdogs.php">Dog Collection</a> ---
+<a href="collections.php">Collections</a> ---
 <a href="viewrequests.php">Walk Requests</a> ---
-<a href="viewposts.php">Walk Posts</a> ---
+<a href="viewposts.php">Walk Posts</a>
 <?php
 session_start();
 $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
