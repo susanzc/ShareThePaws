@@ -1,31 +1,32 @@
 
+
 INSERT INTO ownerNameNum(Name, phoneNum)
-	VALUES ('Alice Margeret', '111-111-1111'),
-	('Robert Picton', '222-222-2222'),
-	('Carrie Smith', '333-333-3333'),
-	('Dillan Thomas', '444-444-4444'),
-	('Edgar Wellington', '555-555-5555');
+	VALUES ('Alice Margeret', '1111111111'),
+	('Robert Picton', '2222222222'),
+	('Carrie Smith', '3333333333'),
+	('Dillan Thomas', '4444444444'),
+	('Edgar Wellington', '5555555555');
 
 INSERT INTO walkerNameNum(Name, phoneNum)
-	VALUES ('Feres Salem', '011-111-1111'),
-	('George Renford', '022-222-2222'),
-	('Hilda Ostereich', '033-333-3333'),
-	('Igrid Smolson', '044-444-4444'),
-	('Joseph Aramathia', '055-555-5555');
-	
+	VALUES ('Feres Salem', '0111111111'),
+	('George Renford', '0222222222'),
+	('Hilda Ostereich', '0333333333'),
+	('Igrid Smolson', '0444444444'),
+	('Joseph Aramathia', '0555555555');
+
 INSERT INTO DogOwner(Username, Password, userImage, PhoneNum)
-	VALUES ('alice', 'password', 'alice.jpg', '111-111-1111'),
-	('bob', 'password', 'bob.jpg', '222-222-2222'),
-	('carrie', 'password', 'carrie.jpg', '333-333-3333'),
-	('dillan', 'password', 'dillan.jpg', '444-444-4444'),
-	('edger', 'password', 'edger.jpg', '555-555-5555');
+	VALUES ('alice', 'password', 'alice.jpg', '1111111111'),
+	('bob', 'password', 'bob.jpg', '2222222222'),
+	('carrie', 'password', 'carrie.jpg', '3333333333'),
+	('dillan', 'password', 'dillan.jpg', '4444444444'),
+	('edger', 'password', 'edger.jpg', '5555555555');
 
 INSERT INTO DogWalker(Username, Password, userImage, PhoneNum, personalBio,  WalksCompleted)
-	VALUES ('feres', 'password', 'feres.jpg', '011-111-1111', 'Just here to walk some dogs',0),
-	('george', 'password', 'george.jpg', '022-222-2222', 'a dog walker', 0),
-	('hilda', 'password', 'hilda.jpg', '033-333-3333', 'give me dogs', 1),
-	('igrid', 'password', 'igrid.jpg', '044-444-4444', 'i like walks', 1),
-	('joe', 'password', 'joe.jpg', '055-555-5555', 'give me walks', 0);
+	VALUES ('feres', 'password', 'feres.jpg', '0111111111', 'Just here to walk some dogs',0),
+	('george', 'password', 'george.jpg', '0222222222', 'a dog walker', 0),
+	('hilda', 'password', 'hilda.jpg', '0333333333', 'give me dogs', 1),
+	('igrid', 'password', 'igrid.jpg', '0444444444', 'i like walks', 1),
+	('joe', 'password', 'joe.jpg', '0555555555', 'give me walks', 0);
 
 INSERT INTO DogType(age, breed, size)
 	VALUES (1, 'golden retriever', 'S'),
@@ -116,24 +117,40 @@ INSERT INTO DogType(age, breed, size)
 
 INSERT INTO Dog(Name, Age, Breed, Gender, dogImage, Owner)
 	VALUES ('Rover', 4, 'pit bull', 'M', 'rover.jpg', 'alice'),
+	('Dover', 1, 'pit bull', 'M', 'dover.jpg', 'alice'),
 	('Spot', 4, 'husky', 'F', 'spot.jpg', 'bob'),
 	('Rex', 4, 'pomerainian', 'M', 'rex.jpg',  'carrie'),
 	('Fido', 4, 'corgi', 'F', 'fido.jpg', 'dillan'),
-	('Rover', 4, 'golden retriever', 'M', 'rover.jpg', 'edger');
+	('Teddy', 4, 'golden retriever', 'M', 'rover.jpg', 'edger');
 
 INSERT INTO WalkPost(Owner, Dog, referenceID, starttime, startlocn, endtime, endlocn, booked, completed, specialRequests)
-	VALUES ('alice', 'Rover', 0, '2020-01-01 09:00:00', 'UBC Vancouver', '2020-01-01 11:00:00', 'UBC Vancouver', 'F', 'F', 'throw ball'),
-	('alice', 'Rover', 1, '2020-01-01 12:00:00', 'Vancouver General Hospital', '2020-01-01 14:00:00', 'Central Park', 'F', 'F', 'throw ball'),
-	('bob', 'Spot', 2, '2020-01-01 12:00:00', 'Jericho Beach', '2020-01-01 17:00:00', 'UBC Vancouver', 'F', 'F', 'throw frisbee'),
-	('dillan', 'Fido', 3, '2020-01-02 14:00:00', 'Kitsilano Beach', '2020-01-01 16:00:00', 'Kitsilano Beach', 'F', 'F', 'run'),
-	('carrie', 'Rex', 4, '2020-01-03 10:00:00', 'Spanish Banks', '2020-01-01 17:00:00', 'Spanish Banks', 'F', 'F', 'rub belly');
+	VALUES ('alice', 'Rover', 0, '2020-01-01 09:00:00', 'UBC Vancouver', '2020-01-01 11:00:00', 'UBC Vancouver', 0, 0, 'throw ball'),
+	('alice', 'Dover', 1, '2020-01-01 12:00:00', 'Vancouver General Hospital', '2020-01-01 14:00:00', 'Central Park', 0, 0, 'throw rope'),
+	('bob', 'Spot', 2, '2020-01-01 12:00:00', 'Jericho Beach', '2020-01-01 17:00:00', 'UBC Vancouver', 0, 0, 'throw frisbee'),
+	('dillan', 'Fido', 3, '2020-01-02 14:00:00', 'Kitsilano Beach', '2020-01-01 16:00:00', 'Kitsilano Beach', 0, 0, 'run'),
+	('carrie', 'Rex', 4, '2020-01-03 10:00:00', 'Spanish Banks', '2020-01-01 17:00:00', 'Spanish Banks', 0, 0, 'give paw'),
+	('edger', 'Teddy', 5, '2020-01-03 10:00:00', 'Spanish Banks', '2020-01-01 17:00:00', 'English Bay', 0, 0, 'pat head'),
+	('alice', 'Rover', 6, '2018-01-01 09:00:00', 'main street', '2018-01-01 11:00:00', 'fraser street', 1, 1, 'he is a good doggo'),
+	('alice', 'Dover', 7, '2018-01-01 12:00:00', 'dunbar street', '2018-01-01 14:00:00', 'ubc', 1, 1, 'he is a good good pupper'),
+	('bob', 'Spot', 8, '2018-01-01 12:00:00', 'king edward ave', '2018-01-01 17:00:00', 'dunbar', 1, 1, 'he is a good pupper'),
+	('dillan', 'Fido', 9, '2018-01-02 14:00:00', 'kingsway', '2018-01-01 16:00:00', 'fraser', 1, 1, 'he is a very very good boy'),
+	('carrie', 'Rex', 10, '2018-01-03 10:00:00', 'QE park', '2018-01-01 17:00:00', 'oakridge centre', 1, 1, 'he is a very good boy'),
+	('edger', 'Teddy', 11, '2018-01-03 10:00:00', 'metrotown', '2018-01-01 17:00:00', 'crystal mall', 1, 1, 'he is a good boy');
 
 INSERT INTO WalkRequest(walkerID, walkID, requestID, message, confirmed)
-	VALUES ('feres', 0, 3, 'let me walk dogs pls thxs', 'F'),
-	('george', 1, 4, 'I am very experienced with doggos', 'F'),
-	('hilda', 2, 1, 'like, your dog is rly cute', 'F'),
-	('igrid', 3, 8,  'I am here for dog walks', 'F'),
-	('joe', 4, 9, 'let me walk dogs pls thxs', 'F');
+	VALUES ('feres', 0, 0, 'let me walk dogs pls thxs', 0),
+	('george', 1, 1, 'I am very experienced with doggos', 0),
+	('hilda', 2, 2, 'like, your dog is rly cute', 0),
+	('igrid', 3, 3,  'I am here for dog walks', 0),
+	('joe', 4, 4, 'let me walk dogs pls thxs', 0),
+	('joe', 6, 5, 'walking ALL the dogs', 1),
+	('joe', 7, 6, 'walking ALL the dogs', 1),
+	('joe', 8, 7, 'walking ALL the dogs', 1),
+	('joe', 9, 8, 'walking ALL the dogs', 1),
+	('joe', 10, 9, 'walking ALL the dogs', 1),
+	('joe', 11, 10, 'walking ALL the dogs', 1);
+
+
 
 INSERT INTO Review(writtenBy, writtenFor, reviewID, rating, date, comment)
 	VALUES ('alice', 'feres', 0, 4, '2020-01-01 00:08:00', 'pretty chill dude tbh'),
