@@ -1,4 +1,5 @@
 
+
 INSERT INTO ownerNameNum(Name, phoneNum)
 	VALUES ('Alice Margeret', '1111111111'),
 	('Robert Picton', '2222222222'),
@@ -148,6 +149,7 @@ INSERT INTO WalkRequest(walkerID, walkID, requestID, message, confirmed)
 	('joe', 9, 8, 'walking ALL the dogs', 1),
 	('joe', 10, 9, 'walking ALL the dogs', 1),
 	('joe', 11, 10, 'walking ALL the dogs', 1);
+
 
 
 INSERT INTO Review(writtenBy, writtenFor, reviewID, rating, date, comment)
