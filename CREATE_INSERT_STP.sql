@@ -114,7 +114,7 @@ INSERT INTO DogWalker(Username, Password, userImage, PhoneNum, personalBio,  Wal
 	('george', 'password', 'default.jpg', '0222222222', 'a dog walker', 0),
 	('hilda', 'password', 'default.jpg', '0333333333', 'give me dogs', 1),
 	('igrid', 'password', 'default.jpg', '0444444444', 'i like walks', 1),
-	('joe', 'password', 'default.jpg', '0555555555', 'give me walks', 0);
+	('joe', 'password', 'default.jpg', '0555555555', 'give me walks', 6);
 
 INSERT INTO DogType(age, breed, size)
 	VALUES (1, 'golden retriever', 'S'),
