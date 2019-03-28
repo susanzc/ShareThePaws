@@ -347,7 +347,6 @@ else {
         <form action='viewposts.php' method='post'>
         <select name='size'>";
 
-
        $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
        $sql = "SELECT DISTINCT size FROM DogType";
        $result = $conn->query($sql);
@@ -357,28 +356,47 @@ else {
 
 
         echo "</select>
-        <input type='submit' name='submitFilter' value='Submit Filter'>
-        <input type='submit' name='cancelFilter' value='Cancel Filter'>
+        <input type='submit' name='filterSize' value='Filter by Size'>
         </form>";
+
+        echo "<label>Filter by date range:</label>
+        <form action='viewposts.php' method='post'>
+        <label>Start</label>
+        <input name='startTime' type='datetime-local' placeholder='Type Here'>
+        <label>End</label>
+        <input name='endTime' type='datetime-local' placeholder='Type Here'>
+        <input type='submit' name='filterTimeframe' value='Filter by date'>
+        <br>
+        <br>
+        <input type='submit' name='cancelFilter' value='Cancel Filters'>
+       </form>";
 
 
         echo "<h2>Available Walks:</h2>";
-        if (array_key_exists('submitFilter', $_POST)) {
+        if (array_key_exists('filterSize', $_POST)) {
             $size = $_POST['size'];
             $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
             FROM walkpost w, Dog d, DogType dt WHERE w.booked = 0 AND w.completed = 0 AND w.dog = d.name AND d.age = dt.age AND d.breed = dt.breed AND dt.size = '$size'";
 
+        } else if (array_key_exists('filterTimeframe', $_POST)){
+            $startTime = $_POST['startTime'];
+            $endTime = $_POST['endTime'];
+            $startDatetime = date("Y-m-d H:i:s", strtotime($startTime));
+            $endDatetime = date("Y-m-d H:i:s", strtotime($endTime));
+            $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
+            FROM walkpost w, Dog d, DogType dt WHERE w.booked = 0 AND w.completed = 0 AND w.dog = d.name AND d.age = dt.age AND d.breed = dt.breed AND w.starttime >= '$startDatetime' AND w.endtime <= '$endDatetime'";
         } else {
-              $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
-              FROM walkpost w, Dog d, DogType dt WHERE w.booked = 0 AND w.completed = 0 AND w.dog = d.name AND d.age = dt.age AND d.breed = dt.breed";
+            $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
+            FROM walkpost w, Dog d, DogType dt WHERE w.booked = 0 AND w.completed = 0 AND w.dog = d.name AND d.age = dt.age AND d.breed = dt.breed";
         }
+
         $result = $conn->query($sql);
         generateTable($result, false);
     }
     else {
         // show all results for anon user
         $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed
-        FROM walkpost WHERE booked = 0 AND completed = 0";
+        FROM walkpost WHveERE booked = 0 AND completed = 0";
         $result = $conn->query($sql);
         generateTable($result, false);
     }
