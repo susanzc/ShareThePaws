@@ -1,5 +1,6 @@
 <div class="menu">
-<a href="index.html">Home</a> ---  
+<a href="index.html">Home</a> ---
+<a href="viewdogs.php">Dogs</a> ---
 <a href="dogmeetups.php">Dog Meetups</a> ---
 <a href="viewrequests.php">Walk Requests</a> ---
 <a href="viewposts.php">Walk Posts</a>
@@ -165,7 +166,7 @@ else if (array_key_exists('approverequest', $_POST)) {
 else {
     if ($usertype == "walker") {
         // confirmed but not completed requests
-        $sql = "SELECT walkerid, walkid, requestid, message FROM walkrequest 
+        $sql = "SELECT walkerid, walkid, requestid, message FROM walkrequest
         WHERE confirmed = 1 AND walkerid = '$user' AND walkid IN
         (
             SELECT referenceid as walkid
@@ -176,9 +177,9 @@ else {
         echo "
         <h2>Confirmed Requests:</h2>";
         generateWalkerTable($result, true);
-        
+
         // pending requests
-        $sql = "SELECT walkerid, walkid, requestid, message FROM walkrequest 
+        $sql = "SELECT walkerid, walkid, requestid, message FROM walkrequest
         WHERE confirmed = 0 AND walkerid = '$user'";
         $result = $conn->query($sql);
         echo "
@@ -187,7 +188,7 @@ else {
     }
     else if ($usertype == "owner") {
         // only pending requests for the owner's posts
-        $sql = "SELECT wr.walkerid as walkerid, 
+        $sql = "SELECT wr.walkerid as walkerid,
         wr.walkid as walkid, wr.requestid as requestid, wr.message as message
         FROM walkrequest wr, walkpost wp
         WHERE wr.walkid = wp.referenceid AND wp.owner = '$user' AND wr.confirmed = 0";

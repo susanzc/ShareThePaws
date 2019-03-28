@@ -1,6 +1,7 @@
 
 <div class="menu">
-<a href="index.html">Home</a> ---  
+<a href="index.html">Home</a> ---
+<a href="viewdogs.php">Dogs</a> ---
 <a href="dogmeetups.php">Dog Meetups</a> ---
 <a href="viewrequests.php">Walk Requests</a> ---
 <a href="viewposts.php">Walk Posts</a>
@@ -37,7 +38,7 @@ if ($usertype === "owner") {
         text-decoration: none;
         display: inline-block; */
         font-size: 12px;
-        cursor: pointer; 
+        cursor: pointer;
     }
 
     th {
@@ -90,7 +91,7 @@ function generateTable($result, $booked) {
         if ($usertype === "owner") {
             if ($booked) {
             echo "
-            
+
             <td class='borderclass'>
             <form action='viewposts.php' method='post'>
             <input type='hidden' name='refid' value='".$row["referenceid"]."'>
@@ -200,36 +201,36 @@ else {
         // show only results associated with user
         echo "<h2>Booked Walks:</h2>";
         // todo - join with walkrequest and show walker that booked the walk
-        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed
         FROM walkpost WHERE booked = 1 AND completed = 0 AND owner = '$user'";
         $resultbooked = $conn->query($sql);
         generateTable($resultbooked, true);
 
         echo "<h2>Unbooked Walks:</h2>";
-        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed
         FROM walkpost WHERE booked = 0 AND completed = 0 AND owner = '$user'";
         $resultunbooked = $conn->query($sql);
         generateTable($resultunbooked, false);
 
-        
+
     }
     else if ($usertype === "walker") {
         echo "<h2>Scheduled Walks:</h2>";
-        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
-        FROM walkpost WHERE booked = 1 AND completed = 0 AND 
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed
+        FROM walkpost WHERE booked = 1 AND completed = 0 AND
         referenceid in (SELECT walkid FROM walkrequest WHERE walkerid = '$user' AND confirmed = 1)";
         $result = $conn->query($sql);
         generateTable($result, true);
 
         echo "<h2>Available Walks:</h2>";
-        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed
         FROM walkpost WHERE booked = 0 AND completed = 0";
         $result = $conn->query($sql);
         generateTable($result, false);
     }
     else {
         // show all results for anon user
-        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed 
+        $sql = "SELECT referenceid, owner, dog, starttime, startlocn, endtime, endlocn, specialrequests, booked, completed
         FROM walkpost WHERE booked = 0 AND completed = 0";
         $result = $conn->query($sql);
         generateTable($result, false);
