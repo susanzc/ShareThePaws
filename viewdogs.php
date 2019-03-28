@@ -118,7 +118,15 @@ if ($result->num_rows > 0) {
    while($row = $result->fetch_assoc()) {
      echo "<tr>";
      foreach ($_POST['check_list'] as $value) {
-       echo "<td class='border-class'>".$row[$value]."</td>";
+       if ($value === 'dogImage') {
+        echo "<td class='border-class'><center><img width='100px'src='uploads/".$row[$value]."'></center></td>";
+       }
+       else if ($value === 'owner') {
+        echo "<td class='border-class'><a href='owner.php?owner=".$row[$value]."'>$row[$value]</a></td>";
+       }
+       else {
+        echo "<td class='border-class'>".$row[$value]."</td>";
+       }
      }
      echo "</tr>";
    }
