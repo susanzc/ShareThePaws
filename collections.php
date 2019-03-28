@@ -43,7 +43,7 @@
 </html>
 <div class="menu">
 <a href="index.html">Home</a> ---  
-<a href="viewdogs.php">Dog Meetups</a> ---
+<a href="dogmeetups.php">Dog Meetups</a> ---
 <a href="collections.php">Collections</a> ---
 <a href="viewrequests.php">Walk Requests</a> ---
 <a href="viewposts.php">Walk Posts</a>
@@ -69,7 +69,7 @@ if ($user != "") {
 <div class="container">
 <div class="main">
 <h2>Share The Paws: Collections</h2>
-<a href="dogmeetups.php">Dogs</a><br>
+<a href="viewdogs.php">Dogs</a><br>
 <a href="viewwalkers.php">Dog Walkers</a><br>
 <a href="halloffame.php">Hall of Fame</a><br>
 </div>
