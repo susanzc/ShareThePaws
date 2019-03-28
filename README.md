@@ -2,31 +2,17 @@
 
 Pages:
 
-Register page:
-- register as a dog owner or a dog walker
-- if dog owner, add dog(s) to profile
+Setup Notes:
+- need to set appropriate permissions for htdocs/temp and htdocs/upload directories for file upload to work successfully (this is assuming the application is run in xamppfiles)
 
-Walkers dashboard (visible to walkers only): 
-Tab 1: (viewposts.php)
-- display all available walk posts
-- can filter by date, time, dog, etc
-- walkers can request to walk a dog
-Tab 2:
-- walkers can see all their booked appointments, can manage
-Tab 3: (can be seen by owners)
-- profile
-- reviews
+Demo Examples:
 
-
-Owners dashboard (visible to owners only)
-Tab 1:
-- owners can add a walk post for their dog, spec date/time
-Tab 2: (viewrequests.php)
-- owner can see all pending/approved requests for their dog walks
-- able to manage requests (confirm, delete)
-Tab 3: (can be seen by walkers)
-- profile
-
-
-Dog meetups page: (dogmeetups.php)
-- display all dog meetup events
+1. Insert Operation: Add Walk Post
+2. Delete Operation: Delete Walk Post, deletes all associated requests as well
+3. Update Operation: Edit Walk Post (that hasn't been booked)
+4. Selection: Filter Walk Post by time
+5. Projection: Collections -> Dogs, select attributes to view
+6. Join: Filter Walk Posts by dog size
+7. Aggregation: Dog Walkers display average rating
+8. Nested aggregation with group-by: Collections -> Dog walkers, display count and average of ratings for all dog walkers
+9. Division: Collections -> Hall of Fame, display dog walkers who have walked all the dogs
