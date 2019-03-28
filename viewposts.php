@@ -377,6 +377,7 @@ else {
             $size = $_POST['size'];
             $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
             FROM walkpost w, Dog d, DogType dt WHERE w.booked = 0 AND w.completed = 0 AND w.dog = d.name AND d.age = dt.age AND d.breed = dt.breed AND dt.size = '$size'";
+            echo "<p style='font-style:italic; font-size:11pt; color: grey'>Displaying walks for dogs of size $size:</p>";
 
         } else if (array_key_exists('filterTimeframe', $_POST)){
             $startTime = $_POST['startTime'];
@@ -384,7 +385,9 @@ else {
             $startDatetime = date("Y-m-d H:i:s", strtotime($startTime));
             $endDatetime = date("Y-m-d H:i:s", strtotime($endTime));
             $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
-            FROM walkpost w, Dog d, DogType dt WHERE w.booked = 0 AND w.completed = 0 AND w.dog = d.name AND d.age = dt.age AND d.breed = dt.breed AND w.starttime >= '$startDatetime' AND w.endtime <= '$endDatetime'";
+            FROM walkpost w WHERE w.booked = 0 AND w.completed = 0 AND w.starttime >= '$startDatetime' AND w.starttime <= '$endDatetime'
+            AND w.endtime <= '$endDatetime' AND w.endtime >= '$startDatetime'";
+            echo "<p style='font-style:italic; font-size:11pt; color: grey'>Displaying walks between $startDatetime and $endDatetime:</p>";
         } else {
             $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
             FROM walkpost w, Dog d, DogType dt WHERE w.booked = 0 AND w.completed = 0 AND w.dog = d.name AND d.age = dt.age AND d.breed = dt.breed";
