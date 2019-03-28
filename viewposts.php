@@ -58,6 +58,7 @@ if ($user != "") {
 }
 ?>
 </div>
+<center>
 <h1>Walk Posts</h1>
 
 <?php
@@ -152,8 +153,8 @@ if (array_key_exists('requestwalk', $_POST)) {
     echo "<form action='viewposts.php' method='post'>
     <input type='hidden' name='walkid' value='".$walkid."'>
     <textarea class='text' placeholder='Eg. Hi! I am very interested in walking your dog :)' cols='70' rows ='5' name='message'></textarea>
-    <br>
-    <input type='submit' name='submitrequest' value='Submit Request'>
+    <br><br>
+    <button type='submit' name='submitrequest' value='Submit Request'>Submit Request</button>
    </form>";
 
 }
@@ -355,3 +356,4 @@ else {
 }
 CloseCon($conn);
 ?>
+</center>

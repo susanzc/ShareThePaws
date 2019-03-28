@@ -46,6 +46,7 @@ if ($user != "") {
 }
 ?>
 </div>
+<center>
 <h1>Walk Requests</h1>
 <?php
 include 'connect.php';
@@ -209,3 +210,4 @@ else {
 }
 CloseCon($conn);
 ?>
+</center>

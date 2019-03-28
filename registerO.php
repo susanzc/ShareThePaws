@@ -3,6 +3,18 @@
     * {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
+    button {
+        background-color: #4CAF50;
+        /* border:0.16em solid #666; */
+        border-radius:2em;
+        color: white;
+        padding: 10px 15px;
+        /* text-align: center;
+        text-decoration: none;
+        display: inline-block; */
+        font-size: 14px;
+        cursor: pointer; 
+    }
 </style>
 </html>
 <div class="menu">
@@ -18,8 +30,9 @@ if ($user != "") {
 }
 ?>
 </div>
+<center>
+<h2>Register as a Dog Owner</h2>
 <form action="registerO.php" method="post">
- <br>
  <br>
  <label>Username:</label>
  <input name="username" type="text" placeholder="Type Here">
@@ -31,8 +44,7 @@ if ($user != "") {
  <input name="name" type="text" placeholder="Type Here">
  <br>
  <br>
- <label>Image:</label>
- <b>Select a file</b>
+ <label>Display Image (optional):</label>
  <input name="userImage" type="file" placeholder="Type Here">
  <br>
  <br>
@@ -44,15 +56,16 @@ if ($user != "") {
    <option value="dogwalker">Walker</option>
   <option value="dogowner">Owner</option>
  </select> -->
- <br>
  <br><br>
- <input type="submit" name="registration" value="Register">
+ <button type="submit" name="registration" value="Register">Register</button>
 </form>
+</center>
 
 
 <?php
 include 'connect.php';
 $conn = OpenCon();
+echo "<center>";
 if (array_key_exists('registration', $_POST)) {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -102,5 +115,6 @@ if (array_key_exists('registration', $_POST)) {
 
     }
 }
+echo "</center>";
 CloseCon($conn);
 ?>

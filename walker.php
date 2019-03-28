@@ -33,7 +33,7 @@ $conn = OpenCon();
 
 function displayReviews($result) {
     while($row = $result->fetch_assoc()) {
-        echo "<div style='margin: 10px; background-color: whitesmoke; padding: 10px; border-width: 1px; border-style: solid'>";
+        echo "<div style='margin: 10px; width: 500px; border-radius: 1em; background-color: whitesmoke; padding: 10px; border-width: 1px; border-style: solid'>";
         echo "<div><b>Date: </b>".substr($row['date'], 0, 10)."</div>";
         echo "<div><b>Written By: </b>".$row['writtenby']."</div>";
         echo "<div><b>Rating: </b>".$row['rating']."/5</div>";
@@ -42,6 +42,7 @@ function displayReviews($result) {
     }
 }
 $walker = $_GET['walker'];
+echo "<center>";
 echo "<h1>Dog Walker: $walker</h1>";
 $sql = "SELECT dw.userimage as userimage, dw.personalbio as personalbio,
 dw.walkscompleted as walkscompleted, wnn.phonenum as phonenum, wnn.name as name
@@ -72,7 +73,7 @@ $result = $conn->query($sql);
 $numreviews = mysqli_num_rows($result);
 echo "<h2>Reviews (".$numreviews.")</h2>";
 displayReviews($result);
-
+echo "</center>";
 CloseCon($conn);
 
 ?>

@@ -45,7 +45,7 @@ $conn = OpenCon();
 
 function displayDogs($result) {
     while($row = $result->fetch_assoc()) {
-        echo "<div style='margin: 10px; background-color: whitesmoke; padding: 10px; border-width: 1px; border-style: solid'>";
+        echo "<div style='margin: 10px; width: 500px; border-radius: 1em; background-color: whitesmoke; padding: 10px; border-width: 1px; border-style: solid'>";
         echo "<div><b>Name: </b>".substr($row['name'], 0, 10)."</div>";
         echo "<div><b>Breed: </b>".$row['breed']."</div>";
         echo "<div><b>Age: </b>".$row['age']."</div>";
@@ -55,6 +55,7 @@ function displayDogs($result) {
     }
 }
 $owner = $_GET['owner'];
+echo "<center>";
 echo "<h1>Dog Owner: $owner</h1>";
 $sql = "SELECT do.userimage as userimage,
 do.phonenum as phonenum, onn.name as name
@@ -118,7 +119,7 @@ $result = $conn->query($sql);
 $numdogs = mysqli_num_rows($result);
 echo "<h2>Dogs (".$numdogs.")</h2>";
 displayDogs($result);
-
+echo "</center>";
 CloseCon($conn);
 
 ?>

@@ -13,6 +13,7 @@
 <?php
 session_start();?>
 </div>
+<center>
 <?php
 include 'connect.php';
 $username = $_POST['username'];
@@ -57,3 +58,4 @@ else {
     }
 }
 ?>
+</center>

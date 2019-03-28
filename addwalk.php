@@ -3,6 +3,21 @@
     * {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
+    button {
+            background-color: #4CAF50;
+            /* border:0.16em solid #666; */
+            border-radius:2em;
+            color: white;
+            padding: 5px 10px;
+            /* text-align: center;
+            text-decoration: none;
+            display: inline-block; */
+            font-size: 14px;
+            cursor: pointer; 
+        }
+    input {
+        margin: 5px;
+    }
 </style>
 </html>
 <div class="menu">
@@ -27,6 +42,7 @@ if ($user != "") {
 }
 ?>
 </div>
+<center>
 <h1>Add a Walk</h1>
 <form action="addwalk.php" method="post">
  <label>Dog Name:</label>
@@ -66,7 +82,7 @@ if ($user != "") {
  <label>Special Requests:</label><br>
  <textarea class="text" cols="70" rows ="5" name="requests"></textarea>
  <br><br>
- <input type="submit" name="submitpost" value="Submit Post">
+ <button type="submit" name="submitpost" value="Submit Post">Submit Post</button>
 </form>
 
 <?php
@@ -110,3 +126,4 @@ if (array_key_exists('submitpost', $_POST)) {
 }
 CloseCon($conn);
 ?>
+</center>

@@ -58,6 +58,7 @@ if ($user != "") {
 }
 ?>
 </div>
+<center>
 <h1>Dog Meetups</h1>
 <?php
 include 'connect.php';
@@ -119,3 +120,4 @@ echo "0 results";
 }
 CloseCon($conn);
 ?>
+</center>
