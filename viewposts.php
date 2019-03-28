@@ -169,7 +169,7 @@ else if (array_key_exists('submitrequest', $_POST)) {
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
     $reqid = $row['max'] + 1;
-    $sql = "insert into walkrequest values ('$user', '$walkid', $reqid, '$message', 'F')";
+    $sql = "insert into walkrequest values ('$user', '$walkid', $reqid, '$message', 0)";
     $result = $conn->query($sql);
     if ($result === TRUE) {
         echo "<div>Walk request successfully sent!</div><br>";

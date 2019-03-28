@@ -68,7 +68,8 @@ if ($user != "") {
 <center>
 <div class="container">
 <div class="main">
-<h2>Share The Paws: Dog Walkers</h2>
+<h2>☆ Hall of Fame ☆</h2>
+<p style="font-style: italic; color: grey">Dog Walkers that have walked all the dogs registered in Share the Paws!</p>
 </div>
 </div>
 </center>
@@ -89,15 +90,15 @@ $conn = OpenCon();
 // total number of dogs
 // = numbers of dogs walked by dogwalker
 
-$sql = "SELECT COUNT (DISTINCT dog), username
+$sql = "SELECT dw.username
 FROM dogwalker dw
- LEFT JOIN walkrequest wr
- ON username = wr.walkerID
- LEFT JOIN walkpost wp
- ON wr.walkID = wp.referenceID
-WHERE comfirmed AND booked AND completed
-GROUP BY username
-HAVING dog = SELECT COUNT(name, owner) FROM dog";
+WHERE NOT EXISTS
+    (SELECT d.name FROM dog d WHERE NOT EXISTS
+        (SELECT wp.dog , wr.walkerid FROM walkpost wp, walkrequest wr
+            WHERE wp.referenceid = wr.walkid AND wr.confirmed AND wp.booked AND wp.completed
+            AND dw.username = wr.walkerid AND wp.dog = d.name
+        )
+    )";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     echo "<table><tr><th class='border-class'>Dog Walker</th>";

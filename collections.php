@@ -71,7 +71,7 @@ if ($user != "") {
 <h2>Share The Paws: Collections</h2>
 <a href="viewdogs.php">Dogs</a><br>
 <a href="viewwalkers.php">Dog Walkers</a><br>
-<a href="halloffame.php">Hall of Fame</a><br>
+<a href="view-hall-of-fame.php">Hall of Fame</a><br>
 </div>
 </div>
 </center>
