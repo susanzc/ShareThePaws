@@ -342,9 +342,11 @@ else {
         $result = $conn->query($sql);
         generateTable($result, true);
 
+        echo "<h2>Available Walks:</h2>";
+
         echo "<h3>Filter by:</h3>
-        <label>Dog Size:</label>
         <form action='viewposts.php' method='post'>
+        <label>Dog Size:</label>
         <select name='size'>";
 
        $user = isset($_SESSION["user"])? $_SESSION["user"] : "";
@@ -354,25 +356,23 @@ else {
            echo "<option value=\"".$row['size']."\">" . $row['size'] . "</option>";
        }
 
-
         echo "</select>
         <input type='submit' name='filterSize' value='Filter by Size'>
         </form>";
 
-        echo "<label>Filter by date range:</label>
+        echo "
         <form action='viewposts.php' method='post'>
-        <label>Start</label>
+        <label>Start Date/Time</label>
         <input name='startTime' type='datetime-local' placeholder='Type Here'>
-        <label>End</label>
+        <br>
+        <label>End Date/Time</label>
         <input name='endTime' type='datetime-local' placeholder='Type Here'>
-        <input type='submit' name='filterTimeframe' value='Filter by date'>
+        <br><input type='submit' name='filterTimeframe' value='Filter by Date'>
         <br>
         <br>
-        <input type='submit' name='cancelFilter' value='Cancel Filters'>
+        <input type='submit' name='cancelFilter' value='Clear Filters'>
        </form>";
 
-
-        echo "<h2>Available Walks:</h2>";
         if (array_key_exists('filterSize', $_POST)) {
             $size = $_POST['size'];
             $sql = "SELECT w.referenceid, w.owner, w.dog, w.starttime, w.startlocn, w.endtime, w.endlocn, w.specialrequests, w.booked, w.completed
