@@ -92,7 +92,7 @@ echo "<h2>Reviews (".$numreviews.")</h2>";
 if ($usertype === "owner") {
     echo "<form action='writereview.php' method='post'>
             <input type='hidden' name='walkerid' value='".$walker."'>
-            <button type='submit' name='postreview'>+ Write a Review'</button>
+            <button type='submit' name='postreview'>+ Write a Review</button>
             </form>";
 }
 displayReviews($result);
